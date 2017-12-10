@@ -5,7 +5,7 @@ CREATE TABLE  Hanzi (
  HanziS VARCHAR( 8 ) NOT NULL ,
  HanziT VARCHAR( 8 ) ,
  Pinyin VARCHAR( 32 ) NOT NULL ,
- PinyinNum VARCHAR( 1 ) ,
+ PinyinNum VARCHAR( 8 ) ,
  English VARCHAR( 128 ) ,
  PartofSpeech VARCHAR( 16 ) ,
  Audio VARCHAR( 256 ) ,
