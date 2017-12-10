@@ -1,0 +1,15 @@
+CREATE TABLE  Hanzi (
+ id INT NOT NULL AUTO_INCREMENT ,
+ HSK VARCHAR( 1 ) ,
+ Chapter VARCHAR( 2 ) ,
+ HanziS VARCHAR( 8 ) NOT NULL ,
+ HanziT VARCHAR( 8 ) ,
+ Pinyin VARCHAR( 32 ) NOT NULL ,
+ PinyinNum VARCHAR( 1 ) ,
+ English VARCHAR( 128 ) ,
+ PartofSpeech VARCHAR( 16 ) ,
+ Audio VARCHAR( 256 ) ,
+ StrokeGIF VARCHAR( 256 ) ,
+ StrokeVideo VARCHAR( 256 ),
+PRIMARY KEY (  id )
+)CHARACTER SET utf8 COLLATE utf8_general_ci;
