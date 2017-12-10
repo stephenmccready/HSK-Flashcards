@@ -1,6 +1,5 @@
 <?php
 include_once 'db_connect.php';
-include_once 'functions.php';
 $sql="SELECT HanziS,HanziT,Pinyin,PinyinNum,English,PartofSpeech FROM Hanzi";
 if($_GET["HSK"]!="All") {
 	$sql.=" WHERE HSK = " . $_GET["HSK"];	
