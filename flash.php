@@ -8,13 +8,7 @@ include_once 'includes/db_connect.php';
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Flashcards</title>
 	<link type="text/css" rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css">
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
-	<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
-	<!--[if IE]>
-	<script src="https://stephenmccready.asia/html5shiv.min.js"></script>
-	<![endif]-->
-  <link type="text/css" rel="stylesheet" href="css/flash.css">
-	<script src="js/flash.js"></script>
+  	<link type="text/css" rel="stylesheet" href="css/flash.css">
 </head>
 <body onload="LoadFlashCards();">
 <div class="wrapper">
@@ -74,7 +68,7 @@ include_once 'includes/db_connect.php';
 		<span class="glyphicon glyphicon-backward"></span></button></div>
 	<div id="footLeft"></div>
 	<div class="ftrBtn">
-		<button type="button" class="btn btn-info" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide();displayCard();">
+		<button type="button" class="btn btn-info" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide();displayCard('next');">
 		<span class="glyphicon glyphicon-forward"></span></button></div>
 	<div class="ftrBtn">
 		<button type="button" class="btn btn-info" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide();displayCard('last');">
@@ -83,10 +77,16 @@ include_once 'includes/db_connect.php';
 		<button class="btn btn-default btn-pinyin btn-huge" onclick="$('#Pinyin').toggle();">拼音</button>
 		<button class="btn btn-default btn-english btn-huge" onclick="$('#English').toggle();$('#PartofSpeech').toggle();">英语</button>
 		<button class="btn btn-success btn-huge" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide();knowIt();">
-		<span class="glyphicon glyphicon-ok"></span></button>
+			<span class="glyphicon glyphicon-ok"></span></button>
 		<button class="btn btn-danger btn-huge" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide();displayCard();">
-		<span class="glyphicon glyphicon-remove"></span></button>
+			<span class="glyphicon glyphicon-remove"></span></button>
 	</div>
 </div>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
+<!--[if IE]>
+<script src="https://stephenmccready.asia/html5shiv.min.js"></script>
+<![endif]-->
+<script src="js/flash.js"></script>
 </body>
 </html>
