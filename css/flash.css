@@ -2,7 +2,7 @@
 html, body {height: 100%; padding: 0 !important;}
 .wrapper {min-height: 100%;height: auto !important;height: 100%;margin: 0 auto -95px;text-align: center;padding-top: 6px;}
 .footer {height: 95px; text-align: center;}
-#HanziS{font-size: 6em; text-align: center; padding: .05em; margin: .05em; font-family: Georgia, "Times New Roman", "FangSong", "仿宋", STFangSong, "华文仿宋", serif; font-weight: bold; padding: 0;}
+#HanziS{font-size: 6em; text-align: center; padding: .05em; margin: .05em; font-family:PingFang SC,STHeitiSC-Medium,STHeitiTC-Medium !important; padding: 0;}
 #Pinyin, #English, #PartofSpeech{text-align: center; font-size: 2em;}
 #Views {text-align: center; font-size: 1.05em; color: LightGray;}
 #footLeft{width: 40%; color: LightGray; float: left; font-size: 1.5em;}
