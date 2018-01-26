@@ -5,7 +5,7 @@ html, body {height: 100%; padding: 0 !important;}
 #HanziS{font-size: 6em; text-align: center; padding: .05em; margin: .05em; font-family:PingFang SC,STHeitiSC-Medium,STHeitiTC-Medium !important; padding: 0;}
 #Pinyin, #English, #PartofSpeech{text-align: center; font-size: 2em;}
 #Views {text-align: center; font-size: 1.05em; color: LightGray;}
-#footLeft{width: 40%; color: LightGray; float: left; font-size: 1.5em;}
+#footCenter{color: LightGray; font-size: 1.5em; margin-left: 5%; margin-right: 5%;}
 .btn-huge {font-size: 125% !important; margin: .25em; min-width: 3em !important;}
 .pyn {color:purple;}
 .eng {color:green;}
@@ -13,5 +13,4 @@ html, body {height: 100%; padding: 0 !important;}
 .btn-pinyin {color: purple;}
 .btn-english {color: green;}
 p.chk {margin-top: 12px;}
-.ftrBtn{width:15%; float: left;}
 @media only screen and (min-width: 621px) {#HanziS{font-size: 10em;}}
