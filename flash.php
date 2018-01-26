@@ -8,10 +8,12 @@ include_once 'includes/db_connect.php';
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Flashcards</title>
 	<link type="text/css" rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link type="text/css" rel="stylesheet" href="css/flash.css">
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/cookieconsent.min.css" />
 	<script src="js/cookieconsent.min.js"></script>
+	<script src="js/flash.js"></script>
 	<!--[if IE]>
 	<script src="https://stephenmccready.asia/html5shiv.min.js"></script>
 	<![endif]-->
