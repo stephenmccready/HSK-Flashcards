@@ -68,16 +68,15 @@ function dispCard(action) {
 		}
 		LoadFlashCards();
 	} else {
-		if(action=="prev"){
+		if(arrLen!=1) {
+			if(action=="prev"){
 			if(ID!=0){
 				ID--;
 			}
-			$('#debug').text("prev: " + ID.toString() + " " + arrLen.toString());		
 		} else if(action=="next"){
 			if((ID+1) < arrLen){
 				ID++;
 			}
-			$('#debug').text("next: " + ID.toString() + " " + arrLen.toString());			
 		} else if(action=="last"){
 			ID=arrLen-1;
 		} else if(action=="first") {
@@ -94,12 +93,13 @@ function dispCard(action) {
 				ID=0;
 			}
 		}
+		}
 		var row=resultArray[ID];
 		lastID=ID;
 		var col=row.split("~");
 		$('#HanziS').text(col[1]);
 		$('#Pinyin').text(col[3]);
-		$('#English').text(col[5]);
+		$('#English').html(col[5].replace(", ","<br/>"));
 		$('#PartofSpeech').text(col[6]);
 		col[8]++;
 		$('#Views').text('Views: ' + col[8]);
