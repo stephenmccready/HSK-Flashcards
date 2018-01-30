@@ -1,8 +1,8 @@
 * {margin: 0;}
 html, body {height: 100%; padding: 0 !important;}
-.wrapper {min-height: 100%;height: auto !important;height: 100%;margin: 0 auto -95px;text-align: center;padding-top: 6px;}
-.footer {height: 95px; text-align: center;}
-#HanziS{font-size: 6em; text-align: center; padding: .05em; margin: .05em; font-family:PingFang SC,STHeitiSC-Medium,STHeitiTC-Medium !important; padding: 0;}
+.wrapper {min-height: 99%;height: auto !important;height:99%;margin: 0 auto -95px;text-align: center;padding-top: 6px;}
+.footer {height: 95px; text-align: center; z-index:999; position: relative; background-color:#FFF;}
+#HanziS{font-size: 6em; text-align: center; font-family:Kaiti SC, PingFang SC,STHeitiSC-Medium,STHeitiTC-Medium !important; padding: 0;}
 #Pinyin, #English, #PartofSpeech{text-align: center; font-size: 2em;}
 #Views {text-align: center; font-size: 1.05em; color: LightGray;}
 #footCenter{color: LightGray; font-size: 1.5em; margin-left: 5%; margin-right: 5%;}
