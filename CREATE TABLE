@@ -13,3 +13,5 @@ CREATE TABLE  Hanzi (
  StrokeVideo VARCHAR( 256 ),
 PRIMARY KEY (  id )
 )CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE `Hanzi` ADD INDEX(`HSK`);
+ALTER TABLE `Hanzi` ADD INDEX(`Chapter`);
