@@ -1,35 +1,50 @@
-window.addEventListener("load", function(){
-window.cookieconsent.initialise({
-  "palette": {
-    "popup": {
-      "background": "#efefef",
-      "text": "#404040"
-    },
-    "button": {
-      "background": "#8ec760",
-      "text": "#ffffff"
-    }
-  }
-})});
-var resultArray;
-var ID=0;
-var deletedID=0;
-var deletedRow;
-function init () {
-	var HSKLevelCookie=getCookie("HSKLevel");
-	var HSKLessonCookie=getCookie("HSKLesson");
+var HSKLevelCookie;
+var HSKLessonCookie;
+function init() {
+	HSKLevelCookie=getCookie('HSKLevel');
+	HSKLessonCookie=getCookie('HSKLesson');
+	if(HSKLevelCookie=="") {
+		window.cookieconsent.initialise({
+  		"palette": {
+    		"popup": {
+      		"background": "#efefef",
+      		"text": "#404040"
+    		},
+    		"button": {
+     		"background": "#8ec760",
+      		"text": "#ffffff"
+    		}
+  		}
+		});
+	}
+	if(HSKLevelCookie==""){HSKLevelCookie='1';}
+	if(HSKLessonCookie==""){HSKLessonCookie='1';}
 	$("#selHSK").val(HSKLevelCookie);
 	$("#selLesson").val(HSKLessonCookie);
 	LoadFlashCards();
 }
+var resultArray;
+var ID=0;
+var deletedID=0;
+var deletedRow;
 function LoadFlashCards() {
+	$('.loader').show();
+	$('#HanziS').text('');
+	$('#Pinyin').text('');
+	$('#PartofSpeech').text('');
+	$('#English').html('');
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (request.readyState === 4) {
 			if (request.status === 200) {
 				if(request.responseText=="") {
-					$('#English').text("No cards for this lesson currently available");
+					$('#HanziS').text("🚧");
+					$('#Pinyin').text('');
+					$('#PartofSpeech').text('');
+					$('#English').html("No cards for this lesson available yet.");
+					$('#HanziS').show();
 					$('#English').show();
+					$('.loader').hide();
 					resultArray = [];
 				} else {
 					var result = request.responseText;
@@ -38,6 +53,7 @@ function LoadFlashCards() {
 					result = result.substr(0, resultLen);
 					resultArray = result.split("|");
 					ID=0;
+					$('.loader').hide();
 					dispCard('first');
 				}
 			}
@@ -97,15 +113,19 @@ function dispCard(action) {
 		var row=resultArray[ID];
 		lastID=ID;
 		var col=row.split("~");
-		$('#HanziS').text(col[1]);
+		$('#HanziS').text('');
+		for(x=0; x <= col[1].length; x++) {
+			$('#HanziS').append('<a class="strokeURL" href="https://hanyu.baidu.com/s?wd='+col[1].substring(x, 1)+'&ptype=zici" target="_blank">'+col[1].substring(x, 1)+'</a>');
+		}
 		$('#Pinyin').text(col[3]);
-		$('#English').html(col[5].replace(", ","<br/>"));
+		$('#English').text(col[5]);
 		$('#PartofSpeech').text(col[6]);
-		col[8]++;
-		$('#Views').text('Views: ' + col[8]);
+		col[10]++;
+		$('#Views').html('HSK ' + col[7] + '-' + col[8] + '&nbsp;&nbsp;&nbsp;Views: ' + col[10]);
 		var dispID=ID+1;
 		$('#footCenter').text(dispID.toString() + ' of ' + arrLen.toString());
-		resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+col[6]+'~'+col[7]+'~'+col[8]+'~';
+		resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
+						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~';
 		if($('input[name=chkPINYIN]:checked').val()) {$('#Pinyin').show();} else {$('#Pinyin').hide();};
 		if($('input[name=chkENGLISH]:checked').val()) {$('#English').show();} else {$('#English').hide();};
 		if($('input[name=chkENGLISH]:checked').val()) {$('#PartofSpeech').show();} else {$('#PartofSpeech').hide();};
@@ -171,7 +191,7 @@ function getCookie(cname) {
     for(var i = 0; i <ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+        	c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
             return c.substring(name.length, c.length);
