@@ -48,6 +48,8 @@ include_once 'includes/db_connect.php';
 		<option value="18">18</option>
 		<option value="19">19</option>
 		<option value="20">20</option>
+		<option value="Verbs">Verbs</option>
+		<option value="Adjectives">Adjectives</option>
 	</select>
 	<p class="chk">
 	<label class="checkbox-inline"><input type="checkbox" name="chkRANDOM" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide(); dispCard();">Random</label>
