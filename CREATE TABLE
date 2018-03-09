@@ -15,3 +15,11 @@ PRIMARY KEY (  id )
 )CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `Hanzi` ADD INDEX(`HSK`);
 ALTER TABLE `Hanzi` ADD INDEX(`Chapter`);
+ALTER TABLE `Hanzi` ADD INDEX(`PartofSpeech`);
+
+CREATE TABLE Review (
+ id INT NOT NULL ,
+ HSK VARCHAR( 1 )
+PRIMARY KEY (  id )
+)CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE `Review` ADD INDEX(`HSK`);
