@@ -82,8 +82,8 @@ include_once 'includes/db_connect.php';
 			<div class="clearfix pyn" id="Pinyin"></div>
 			<div class="clearfix eng" id="English"></div>
 			<div class="clearfix pos" id="PartofSpeech"></div>
-			<input type="text" hidden id="DBID"></div>
-			<input type="text" hidden id="HSK"></div>
+			<input type="text" hidden id="DBID"/>
+			<input type="text" hidden id="HSK"/>
 		</div>
 	</div>
 </div>
