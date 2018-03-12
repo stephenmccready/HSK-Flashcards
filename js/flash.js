@@ -40,19 +40,29 @@ var ID=0;
 function LoadFlashCards() {
 	$('.loader').show();
 	$('#HanziS').text('');
-	$('#Pinyin').text('');
+	$('#Pinyin0').text('');
+	$('#Pinyin1').text('');
+	$('#Pinyin2').text('');
+	$('#Pinyin3').text('');
+	$('#Pinyin4').text('');
 	$('#PartofSpeech').text('');
 	$('#English').html('');
+	$('#StrokeOrder').text('');
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (request.readyState === 4) {
 			if (request.status === 200) {
 				if(request.responseText==="") {
 					$('#HanziS').text("🚧");
-					$('#Pinyin').text('');
+					$('#Pinyin0').text('');
+					$('#Pinyin1').text('');
+					$('#Pinyin2').text('');
+					$('#Pinyin3').text('');
+					$('#Pinyin4').text('');
 					$('#PartofSpeech').text('');
 					$('#English').html("No cards for this criteria available.");
 					$('#HanziS').show();
+					$('#StrokeOrder').text('');
 					$('#English').show();
 					$('.loader').hide();
 					resultArray = [];
@@ -78,6 +88,7 @@ function LoadFlashCards() {
 function dispCard(action) {
 	var arrLen=resultArray.length;
 	$('#HanziS').text("");
+	$('#StrokeOrder').text('');
 	$('#OnRevList').text("");
 	if(arrLen===0) {
 		$('#HanziS').text("👍");
@@ -99,30 +110,30 @@ function dispCard(action) {
 	} else {
 		if(arrLen!=1) {
 			if(action=="prev"){
-			if(ID!=0){
-				ID--;
-			}
-		} else if(action=="next"){
-			if((ID+1) < arrLen){
-				ID++;
-			}
-		} else if(action=="last"){
-			ID=arrLen-1;
-		} else if(action=="first") {
-			ID=0;
-		} else if($('input[name=chkRANDOM]:checked').val()) {
-			ID=Math.floor(Math.random() * arrLen);
-			if (arrLen!==0 && ID===lastID) {
-				if(ID===0) {ID++;} else {ID--;}
-			}
-		} else if(action=="current"){
-		// Do nothing
-		} else {
-			ID++;
-			if(ID >= arrLen) {
+				if(ID!=0){
+					ID--;
+				}
+			} else if(action=="next"){
+				if((ID+1) < arrLen){
+					ID++;
+				}
+			} else if(action=="last"){
+				ID=arrLen-1;
+			} else if(action=="first") {
 				ID=0;
+			} else if($('input[name=chkRANDOM]:checked').val()) {
+				ID=Math.floor(Math.random() * arrLen);
+				if (arrLen!==0 && ID===lastID) {
+					if(ID===0) {ID++;} else {ID--;}
+				}
+			} else if(action=="current"){
+				// Do nothing
+			} else {
+				ID++;
+				if(ID >= arrLen) {
+					ID=0;
+				}
 			}
-		}
 		}
 		var row=resultArray[ID];
 		lastID=ID;
@@ -131,10 +142,15 @@ function dispCard(action) {
 			if(col[1].substr(x, 1)=="(" || col[1].substr(x, 1)==")") {
 				$('#HanziS').append(col[1].substr(x, 1));
 			} else {
-				$('#HanziS').append('<a class="strokeURL" href="https://hanyu.baidu.com/s?wd='+col[1].substr(x, 1)+'&ptype=zici" target="_blank">'+col[1].substr(x, 1)+'</a>');
+				if(col[1].substr(x, 1)!="") {
+					$('#HanziS').append(col[1].substr(x, 1));
+					$('#StrokeOrder').append('<a class="btn btn-default btn-xs btn-stroke-order" href="https://hanyu.baidu.com/s?wd='
+								+col[1].substr(x, 1)+'&ptype=zici" target="_blank">'+col[1].substr(x, 1)+' stroke</a>');
+				}
 			}
 		}
-		$('#Pinyin').text(col[3]);
+		getPinyinColor(col,null);
+//		$('#Pinyin').html('<a herf="#" url="http://appcdn.fanyi.baidu.com/zhdict/mp3/dang1.mp3" class="mp3-play">'+col[3]+'</a>');
 		$('#English').text(col[5]);
 		$('#PartofSpeech').text(col[6]);
 		$('#HSK').text(col[7]);
@@ -144,9 +160,9 @@ function dispCard(action) {
 		var dispID=ID+1;
 		$('#footCenter').text(dispID.toString() + ' of ' + arrLen.toString());
 		resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
-						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~';	
+						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~';	
 		if(col[10]!=='')	{
-			$('#Delete').html("<button class='btn btn-danger btn-xs' onclick='del("+col[10]+")'>Remove from list</button>");
+			$('#Delete').html("<button class='btn btn-danger btn-xs' onclick='del("+col[10]+")'>Remove from Review</button>");
 		} else {
 			$('#Delete').html("");
 		}
@@ -157,13 +173,78 @@ function dispCard(action) {
 		setCookie("HSKLesson", $("#selLesson").val(), 120);
 	}
 }
+function getPinyinColor(col,trNum) {
+	if(trNum===null) { // Populate the flashcard
+		$('#Pinyin0').text('');
+		$('#Pinyin1').text('');
+		$('#Pinyin2').text('');
+		$('#Pinyin3').text('');
+		$('#Pinyin4').text('');
+		if(col[4]==="" || col[14]===-1){
+			$('#Pinyin0').text(col[3]);
+			$('#Pinyin0').removeClass();
+		} else {
+			var pinyin=col[4].replace(" ","");
+			var pinyinLen=col[13];
+			var offset=0;
+			for(x=0; x<col[13].length; x++) {
+				var pynTone=col[4].substr(x,1);
+				var pynLen=col[13].substr(x,1);
+				if(col[3].substr(offset,1)==" ") {
+					offset++;
+					$('#Pinyin'+x.toString()).append(" ");
+				}
+				if(col[3].substr(offset,1)=="'") {
+					offset++;
+					$('#Pinyin'+x.toString()).append("'");
+				}
+				$('#Pinyin'+x.toString()).append(col[3].substr(offset,pynLen));
+				$('#Pinyin'+x.toString()).removeClass();
+				$('#Pinyin'+x.toString()).addClass("tone"+pynTone);
+				offset=offset+parseInt(pynLen);
+			}
+		}
+	} else { // Populate the table (list)
+		$('#tr'+trNum+'0').text('');
+		$('#tr'+trNum+'1').text('');
+		$('#tr'+trNum+'2').text('');
+		$('#tr'+trNum+'3').text('');
+		$('#tr'+trNum+'4').text('');
+		if(col[4]==="" || col[14]===-1){
+			$('#tr'+trNum+'0').text(col[3]);
+			$('#tr'+trNum+'0').removeClass();
+		} else {
+			var pinyin=(col[4].replace(" ","")).replace("'","");
+			var pinyinLen=col[13];
+			var offset=0;
+			for(x=0; x<col[13].length; x++) {
+				var pynTone=col[4].substr(x,1);
+				var pynLen=col[13].substr(x,1);
+				if(col[3].substr(offset,1)==" ") {
+					offset++;
+					$('#tr'+trNum+x.toString()).append(" ");
+				}
+				if(col[3].substr(offset,1)=="'") {
+					offset++;
+					$('#tr'+trNum+x.toString()).append("'");
+				}
+				$('#tr'+trNum+x.toString()).append(col[3].substr(offset,pynLen));
+				$('#tr'+trNum+x.toString()).removeClass();
+				$('#tr'+trNum+x.toString()).addClass("tone"+pynTone);
+				offset=offset+parseInt(pynLen);
+			}
+		}
+	}
+}
 function populateTable(){
 	$("#listTab tr").remove();
 	$("#wordcount").html("");
 	for (i = 0; i < resultArray.length; i++) {
 		var col=resultArray[i].split("~");
     	$('#listTab').append('<tr><td>'+col[7]+'.'+col[8]+'</td><td>'+col[1]+'</td><td>'
-    		+col[3]+'</td><td><span class="eng">'+col[5]+'</span>&nbsp;<span class="posTab">'+col[6]+'</span></td></tr>');
+    		+'<span id="tr'+i.toString()+'0"></span><span id="tr'+i.toString()+'1"></span><span id="tr'+i.toString()+'2"></span><span id="tr'+i.toString()+'3"></span><span id="tr'+i.toString()+'4"></span>'
+    		+'</td><td>'+col[5]+'&nbsp;<span class="posTab">'+col[6]+'</span></td></tr>');
+		getPinyinColor(col,i.toString());
 	}
 	$("#wordcount").html(resultArray.length+1);
 	$("#wordcount").append(" words");
@@ -193,7 +274,11 @@ function englishChecked() {
 }
 function hskChange() {
 	$('#HanziS').text('');
-	$('#Pinyin').text('');
+	$('#Pinyin0').text('');
+	$('#Pinyin1').text('');
+	$('#Pinyin2').text('');
+	$('#Pinyin3').text('');
+	$('#Pinyin4').text('');
 	$('#English').text('');
 	$('#PartofSpeech').text('');
 	$('#selLesson').val(1);
@@ -234,6 +319,44 @@ function getCookie(cname) {
     }
     return "";
 }
+/*
+class Swipe {
+    constructor(element) {
+        this.xDown = null;
+        this.yDown = null;
+        this.element = typeof(element) === 'string' ? document.querySelector(element) : element;
+        this.element.addEventListener('touchstart', function(evt) {
+            this.xDown = evt.touches[0].clientX;
+            this.yDown = evt.touches[0].clientY;
+        }.bind(this), false);
+    }
+    onLeft(callback) {this.onLeft = callback;return this;}
+    onRight(callback) {this.onRight = callback;return this;}
+    onUp(callback) {this.onUp = callback;return this;}
+    onDown(callback) {this.onDown = callback;return this;}
+    handleTouchMove(evt) {
+        if ( ! this.xDown || ! this.yDown ) {
+            return;
+        }
+        var xUp = evt.touches[0].clientX;
+        var yUp = evt.touches[0].clientY;
+        this.xDiff = this.xDown - xUp;
+        this.yDiff = this.yDown - yUp;
+        if ( Math.abs( this.xDiff ) > Math.abs( this.yDiff ) ) {
+            if ( this.xDiff > 0 ) {this.onLeft();} else {this.onRight();}
+        } else {
+            if ( this.yDiff > 0 ) {this.onUp();} else {this.onDown();}
+        }
+        this.xDown = null;
+        this.yDown = null;
+    }
+    run() {this.element.addEventListener('touchmove', function(evt) {this.handleTouchMove(evt).bind(this);}.bind(this), false);}
+}
+var swiper = new Swipe('#Card');
+swiper.onLeft(function() { dispCard("prev") });
+swiper.onRight(function() { dispCard("next") });
+swiper.run();
+*/
 function add() {	// Add to review list
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
