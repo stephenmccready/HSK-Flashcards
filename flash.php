@@ -8,19 +8,14 @@ include_once 'includes/db_connect.php';
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Flashcards</title>
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
-	<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css">
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
-	<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<link href="css/flash.css" rel="stylesheet" type="text/css" />
-	<script src="js/flash.js"></script>
 	<!--[if IE]>
 	<script src="https://stephenmccready.asia/html5shiv.min.js"></script>
 	<![endif]-->
 </head>
-<body onload="init();">
+<body onload="init()">
 <div class="wrapper">
 	<div class="col-xs-12 col header">
 	<form id="myform" class="form-inline">
@@ -30,9 +25,9 @@ include_once 'includes/db_connect.php';
 		<option value="1">1</option>
 		<option value="2">2</option>
 		<option value="3">3</option>
-<!--		<option value="4">4</option>
+		<option value="4">4</option>
 		<option value="5">5</option>
-		<option value="6">6</option>	-->
+		<option value="6">6</option>
 	</select>&nbsp;&nbsp;Lesson 
 	<select id="selLesson" name="selLesson" onchange="$('#Pinyin').hide();$('#English').hide();LoadFlashCards();">
 		<option value="Review">Review</option>
@@ -65,8 +60,8 @@ include_once 'includes/db_connect.php';
 	</form>
 	<p class="chk" id="pCard">
 		<label class="checkbox-inline"><input type="checkbox" name="chkRANDOM" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide(); dispCard();">Random</label>
-		<label class="pyn checkbox-inline"><input type="checkbox" name="chkPINYIN" onclick="pinyinChecked();">Pinyin</label>
-		<label class="eng checkbox-inline"><input type="checkbox" name="chkENGLISH" onclick="englishChecked();">English</label>
+		<label class="checkbox-inline"><input type="checkbox" name="chkPINYIN" onclick="pinyinChecked();">Pinyin</label>
+		<label class="checkbox-inline"><input type="checkbox" name="chkENGLISH" onclick="englishChecked();">English</label>
 	</p>
 	</div>
     <div class="main clearfix">
@@ -77,11 +72,14 @@ include_once 'includes/db_connect.php';
     	<div id="Card">
     		<div class="loader">Loading</div>
 			<div class="clearfix" id="HanziS"></div>
+			<div class="clearfix" id="StrokeOrder"></div>
 			<div class="clearfix" id="Views"></div>
-			<div class="clearfix" id="Delete"></div>
-			<div class="clearfix pyn" id="Pinyin"></div>
-			<div class="clearfix eng" id="English"></div>
+			<div class="clearfix" id="Pinyin">
+			<span id="Pinyin0"></span><span id="Pinyin1"></span><span id="Pinyin2"></span><span id="Pinyin3"></span><span id="Pinyin4"></span>
+			</div>
+			<div class="clearfix" id="English"></div>
 			<div class="clearfix pos" id="PartofSpeech"></div>
+			<div class="clearfix" id="Delete"></div>
 			<input type="text" hidden id="DBID"/>
 			<input type="text" hidden id="HSK"/>
 		</div>
@@ -96,12 +94,15 @@ include_once 'includes/db_connect.php';
 	<button type="button" class="btn btn-info btn-huge" onclick="dispCard('last');"><span class="glyphicon glyphicon-fast-forward"></span></button>
 	<div class="clearfix"></div>
 	<div class="clearfix">
-		<button class="btn btn-default btn-pinyin btn-huge" onclick="$('#Pinyin').toggle();">Pyn</button>
-		<button class="btn btn-default btn-english btn-huge" onclick="$('#English').toggle();$('#PartofSpeech').toggle();">Eng</button>
-		<button class="btn btn-warning btn-huge" onclick="add();">Rev</button>
+		<button class="btn btn-default btn-huge" onclick="$('#Pinyin').toggle();">Pyn</button>
+		<button class="btn btn-default btn-huge" onclick="$('#English').toggle();$('#PartofSpeech').toggle();">Eng</button>
+		<button class="btn btn-warning btn-huge" onclick="add();">Review</button>
 		<button class="btn btn-success btn-huge" onclick="knowIt();"><span class="glyphicon glyphicon-ok"></span></button>
 		<button class="btn btn-danger btn-huge" onclick="dispCard();"><span class="glyphicon glyphicon-remove"></span></button>
 	</div>
 </div>
-</body>
-</html>
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
+<script src="js/bootstrap-toggle.min.js"></script>
+<script src="js/flash.js"></script>
