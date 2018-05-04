@@ -4,13 +4,13 @@ include_once 'includes/db_connect.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Flashcards</title>
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
-	<link type="text/css" rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-	<link href="css/flash.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-toggle.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@0.11/dist/hanzi-writer.min.js"></script>
 	<!--[if IE]>
 	<script src="https://stephenmccready.asia/html5shiv.min.js"></script>
 	<![endif]-->
@@ -31,9 +31,10 @@ include_once 'includes/db_connect.php';
 	</select>&nbsp;&nbsp;Lesson 
 	<select id="selLesson" name="selLesson" onchange="$('#Pinyin').hide();$('#English').hide();LoadFlashCards();">
 		<option value="Review">Review</option>
-		<option value="Verbs">Verbs</option>
 		<option value="Adjectives">Adjectives</option>
 		<option value="Adverbs">Adverbs</option>
+		<option value="Nouns">Nouns</option>
+		<option value="Verbs">Verbs</option>
 		<option value="All">All</option>
 		<option value="1">1</option>
 		<option value="2">2</option>
@@ -71,8 +72,19 @@ include_once 'includes/db_connect.php';
 		</div>
     	<div id="Card">
     		<div class="loader">Loading</div>
-			<div class="clearfix" id="HanziS"></div>
+			<div id="animation" class="clearfix">
+				<div id="ani-container" class="clearfix"><div id="HanziAni0" class="ani"></div><div id="HanziAni1" class="ani"></div><div id="HanziAni2" class="ani"></div><div id="HanziAni3" class="ani"></div><div id="HanziAni4" class="ani"></div></div>
+			</div>
+			<div id="animation-buttons" class="clearfix">
+				<div id="div-ani0" class="div-btn"><button id="btn-ani0" type="button" class="btn btn-default btn-huge" onclick="writer0.animateCharacter();"><span class="glyphicon glyphicon-pencil"></span></button></div>
+				<div id="div-ani1" class="div-btn"><button id="btn-ani1" type="button" class="btn btn-default btn-huge" onclick="writer1.animateCharacter();"><span class="glyphicon glyphicon-pencil"></span></button></div>
+				<div id="div-ani2" class="div-btn"><button id="btn-ani2" type="button" class="btn btn-default btn-huge" onclick="writer2.animateCharacter();"><span class="glyphicon glyphicon-pencil"></span></button></div>
+				<div id="div-ani3" class="div-btn"><button id="btn-ani3" type="button" class="btn btn-default btn-huge" onclick="writer3.animateCharacter();"><span class="glyphicon glyphicon-pencil"></span></button></div>
+				<div id="div-ani4" class="div-btn"><button id="btn-ani4" type="button" class="btn btn-default btn-huge" onclick="writer4.animateCharacter();"><span class="glyphicon glyphicon-pencil"></span></button></div>
+			</div>
 			<div class="clearfix" id="StrokeOrder"></div>
+			<div class="clearfix" id="Audio"></div>
+			<div id="audio_player_container"></div>
 			<div class="clearfix" id="Views"></div>
 			<div class="clearfix" id="Pinyin">
 			<span id="Pinyin0"></span><span id="Pinyin1"></span><span id="Pinyin2"></span><span id="Pinyin3"></span><span id="Pinyin4"></span>
