@@ -1,3 +1,4 @@
+var writer0;var writer1;var writer2;var writer3;var writer4;
 window.addEventListener("load", function(){
 window.cookieconsent.initialise({
   "palette": {
@@ -13,6 +14,7 @@ window.cookieconsent.initialise({
 })});
 var HSKLevelCookie;
 var HSKLessonCookie;
+var AudioHanzi='';
 function init() {
 	$('#toggleX').bootstrapToggle({
 		off: ' List',
@@ -40,29 +42,22 @@ var ID=0;
 function LoadFlashCards() {
 	$('.loader').show();
 	$('#HanziS').text('');
-	$('#Pinyin0').text('');
-	$('#Pinyin1').text('');
-	$('#Pinyin2').text('');
-	$('#Pinyin3').text('');
-	$('#Pinyin4').text('');
+	$('#Pinyin0, #Pinyin1, #Pinyin2, #Pinyin3, #Pinyin4').text('');
 	$('#PartofSpeech').text('');
 	$('#English').html('');
 	$('#StrokeOrder').text('');
+	$('#Audio').html('');
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (request.readyState === 4) {
 			if (request.status === 200) {
 				if(request.responseText==="") {
-					$('#HanziS').text("🚧");
-					$('#Pinyin0').text('');
-					$('#Pinyin1').text('');
-					$('#Pinyin2').text('');
-					$('#Pinyin3').text('');
-					$('#Pinyin4').text('');
+					$('#HanziAni0').text("🚧");
+					$('#Pinyin0, #Pinyin1, #Pinyin2, #Pinyin3, #Pinyin4').text('');
 					$('#PartofSpeech').text('');
 					$('#English').html("No cards for this criteria available.");
-					$('#HanziS').show();
-					$('#StrokeOrder').text('');
+					$('#Audio').html('');
+					$('#Views').text('');
 					$('#English').show();
 					$('.loader').hide();
 					resultArray = [];
@@ -81,14 +76,16 @@ function LoadFlashCards() {
 			}
 		}
 	};
-	var url='includes/loadFlashCards.php?HSK='+$('#selHSK option:selected').val()+'&Lesson='+$('#selLesson option:selected').val();
+	var url='includes/LoadFlashCards.php?HSK='+$('#selHSK option:selected').val()+'&Lesson='+$('#selLesson option:selected').val();
 	request.open('GET', url, true);
 	request.send();
 }
 function dispCard(action) {
+	$("#HanziAni0").html("");$("#HanziAni1").html("");$("#HanziAni2").html("");$("#HanziAni3").html("");$("#HanziAni4").html("");
 	var arrLen=resultArray.length;
 	$('#HanziS').text("");
 	$('#StrokeOrder').text('');
+	$('#Audio').html('');
 	$('#OnRevList').text("");
 	if(arrLen===0) {
 		$('#HanziS').text("👍");
@@ -138,34 +135,150 @@ function dispCard(action) {
 		var row=resultArray[ID];
 		lastID=ID;
 		var col=row.split("~");
-		for(x=0; x <= col[1].length; x++) {
-			if(col[1].substr(x, 1)=="(" || col[1].substr(x, 1)==")") {
-				$('#HanziS').append(col[1].substr(x, 1));
-			} else {
-				if(col[1].substr(x, 1)!="") {
-					$('#HanziS').append(col[1].substr(x, 1));
-					$('#StrokeOrder').append('<a class="btn btn-default btn-xs btn-stroke-order" href="https://hanyu.baidu.com/s?wd='
-								+col[1].substr(x, 1)+'&ptype=zici" target="_blank">'+col[1].substr(x, 1)+' stroke</a>');
-				}
-			}
+		var wSize = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+		var w=125;var h=125;
+		if(wSize<621) {
+			w=75;
+			h=75;
+			$(".ani").height("75px");
 		}
-		getPinyinColor(col,null);
-//		$('#Pinyin').html('<a herf="#" url="http://appcdn.fanyi.baidu.com/zhdict/mp3/dang1.mp3" class="mp3-play">'+col[3]+'</a>');
-		$('#English').text(col[5]);
-		$('#PartofSpeech').text(col[6]);
-		$('#HSK').text(col[7]);
-		$('#DBID').text(col[9]);
-		col[12]++;
-		$('#Views').html('HSK ' + col[7] + '-' + col[8] + '&nbsp;&nbsp;&nbsp;Views: ' + col[12]);
+		var strokeCol1="#808080";
+		switch (col[6]) {
+			case "1": strokeCol1="#FF0000"; break;
+			case "2": strokeCol1="#008000"; break;
+			case "3": strokeCol1="#0000FF"; break;
+			case "4": strokeCol1="#800080"; break;
+		}
+		var strokeCol2="#808080";
+		switch (col[7]) {
+			case "1": strokeCol2="#FF0000"; break;
+			case "2": strokeCol2="#008000"; break;
+			case "3": strokeCol2="#0000FF"; break;
+			case "4": strokeCol2="#800080"; break;
+		}
+		var strokeCol3="#808080";
+		switch (col[8]) {
+			case "1": strokeCol3="#FF0000"; break;
+			case "2": strokeCol3="#008000"; break;
+			case "3": strokeCol3="#0000FF"; break;
+			case "4": strokeCol3="#800080"; break;
+		}
+		var strokeCol4="#808080";
+		switch (col[9]) {
+			case "1": strokeCol4="#FF0000"; break;
+			case "2": strokeCol4="#008000"; break;
+			case "3": strokeCol4="#0000FF"; break;
+			case "4": strokeCol4="#800080"; break;
+		}
+		var strokeCol5="#808080";
+		switch (col[10]) {
+			case "1": strokeCol5="#FF0000"; break;
+			case "2": strokeCol5="#008000"; break;
+			case "3": strokeCol5="#0000FF"; break;
+			case "4": strokeCol5="#800080"; break;
+		}
+		writer0 = new HanziWriter('HanziAni0', "", {width:w,height:h,padding:0,delayBetweenStrokes:50,strokeColor:strokeCol1});
+		writer0.setCharacter(col[1]);
+		$("#btn-ani0").css("color", strokeCol1);
+		var y=1;
+		if(col[2]!="") {
+			writer1 = new HanziWriter('HanziAni1', "", {width:w,height:h,padding:0,delayBetweenStrokes:50,strokeColor:strokeCol2});
+			writer1.setCharacter(col[2]);
+			$("#btn-ani1").css("color", strokeCol2);
+			y++;
+		} 
+		if(col[3]!="") {
+			writer2 = new HanziWriter('HanziAni2', "", {width:w,height:h,padding:0,delayBetweenStrokes:50,strokeColor:strokeCol3});
+			writer2.setCharacter(col[3]);
+			$("#btn-ani2").css("color", strokeCol3);
+			y++;
+		} 
+		if(col[4]!="") {
+			writer3 = new HanziWriter('HanziAni3', "", {width:w,height:h,padding:0,delayBetweenStrokes:50,strokeColor:strokeCol4});
+			writer3.setCharacter(col[4]);
+			$("#btn-ani3").css("color", strokeCol4);
+			y++;
+		} 
+		if(col[5]!="") {
+			writer4 = new HanziWriter('HanziAni4', "", {width:w,height:h,padding:0,delayBetweenStrokes:50,strokeColor:strokeCol5});
+			writer4.setCharacter(col[5]);
+			$("#btn-ani4").css("color", strokeCol5);
+			y++;
+		} 
+		if(y==1){
+			$("#HanziAni0, #div-ani0").width("100%");$("#HanziAni1, #div-ani1").width("0%");
+			$("#HanziAni2, #div-ani2").width("0%");$("#HanziAni3, #div-ani3").width("0%");
+			$("#HanziAni4, #div-ani4").width("0%");$("#ani-container, #animation-buttons").width("20%");
+			$("#div-ani1").hide();$("#div-ani2").hide();$("#div-ani3").hide();$("#div-ani4").hide();
+		} else if(y==2){
+			$("#HanziAni0, #div-ani0").width("50%");$("#HanziAni1, #div-ani1").width("50%");
+			$("#HanziAni2, #div-ani2").width("0%");$("#HanziAni3, #div-ani3").width("0%");
+			$("#HanziAni4, #div-ani4").width("0%");$("#ani-container, #animation-buttons").width("40%");
+			$("#div-ani1").show();$("#div-ani2").hide();$("#div-ani3").hide();$("#div-ani4").hide();
+		} else if(y==3){
+			$("#HanziAni0, #div-ani0").width("33.3%");$("#HanziAni1, #div-ani1").width("33.3%");
+			$("#HanziAni2, #div-ani2").width("33.3%");$("#HanziAni3, #div-ani3").width("0%");
+			$("#HanziAni4, #div-ani4").width("0%");$("#ani-container, #animation-buttons").width("60%");
+			$("#div-ani1").show();$("#div-ani2").show();$("#div-ani3").hide();$("#div-ani4").hide();
+		} else if(y==4){
+			$("#HanziAni0, #div-ani0").width("25%");$("#HanziAni1, #div-ani1").width("25%");
+			$("#HanziAni2, #div-ani2").width("25%");$("#HanziAni3, #div-ani3").width("25%");
+			$("#HanziAni4, #div-ani4").width("0%");$("#ani-container, #animation-buttons").width("80%");
+			$("#div-ani1").show();$("#div-ani2").show();$("#div-ani3").show();$("#div-ani4").hide();
+		} else if(y==5){
+			$("#HanziAni0, #div-ani0").width("20%");$("#HanziAni1, #div-ani1").width("20%");
+			$("#HanziAni2, #div-ani2").width("20%");$("#HanziAni3, #div-ani3").width("20%");
+			$("#HanziAni4, #div-ani4").width("20%");$("#ani-container, #animation-buttons").width("100%");
+			$("#div-ani1").show();$("#div-ani2").show();$("#div-ani3").show();$("#div-ani4").show();
+		}
+		AudioHanzi1="";
+		AudioHanzi2="";
+		AudioHanzi1=col[1]+"%28"+col[16]+"%29";
+		AudioHanzi2=col[16];
+		hanziSize=1;
+		if(col[2] != "") {
+			AudioHanzi1=AudioHanzi1+col[2]+"%28"+col[17]+"%29";
+			AudioHanzi2=AudioHanzi2+col[17];
+			hanziSize=2;
+		}
+		if(col[3] != "") {
+			AudioHanzi1=AudioHanzi1+col[3]+"%28"+col[18]+"%29";
+			AudioHanzi2=AudioHanzi2+col[18];
+			hanziSize=3;
+		}
+		if(col[4] != "") {
+			AudioHanzi1=AudioHanzi1+col[4]+"%28"+col[19]+"%29";
+			AudioHanzi2=AudioHanzi2+col[19];
+			hanziSize=4;
+		}
+		if(col[5] != "") {
+			AudioHanzi1=AudioHanzi1+col[5]+"%28"+col[20]+"%29";
+			AudioHanzi2=AudioHanzi2+col[20];
+			hanziSize=5;
+		}
+		$('#Audio').append('<button class="btn btn-default btn-sm btn-audio" onclick="playBAudio(\''+AudioHanzi1+'\',\''+AudioHanzi2+'\','+hanziSize+')"><span class="glyphicon glyphicon-volume-up"></span></button>');
+		$('#Pinyin').html('<span class="tone'+col[6]+'">'+col[11]+'</span>'
+    		+'<span class="tone'+col[7]+'">'+col[12]+'</span>'
+    		+'<span class="tone'+col[8]+'">'+col[13]+'</span>'
+    		+'<span class="tone'+col[9]+'">'+col[14]+'</span>'
+    		+'<span class="tone'+col[10]+'">'+col[15]+'</span>');
+		$('#English').text(col[21]);
+		$('#PartofSpeech').text(col[22]);
+		$('#HSK').text(col[23]);
+		$('#DBID').text(col[25]);
+		col[27]++;
+		$('#Views').html('HSK ' + col[23] + '-' + col[24] + '&nbsp;&nbsp;&nbsp;Views: ' + col[27]);
 		var dispID=ID+1;
 		$('#footCenter').text(dispID.toString() + ' of ' + arrLen.toString());
-		resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
-						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~';	
-		if(col[10]!=='')	{
-			$('#Delete').html("<button class='btn btn-danger btn-xs' onclick='del("+col[10]+")'>Remove from Review</button>");
+		if(col[26]!=='')	{
+			$('#Delete').html("<button class='btn btn-danger btn-sm' onclick='del("+col[10]+")'>Remove from Review</button>");
 		} else {
 			$('#Delete').html("");
 		}
+		resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
+						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~'+col[14]+'~'+
+						col[15]+'~'+col[16]+'~'+col[17]+'~'+col[18]+'~'+col[19]+'~'+col[20]+'~'+col[21]+'~'+col[22]+'~'+col[23]+'~'+
+						col[24]+'~'+col[25]+'~'+col[26]+'~'+col[27]+'~';
 		if($('input[name=chkPINYIN]:checked').val()) {$('#Pinyin').show();} else {$('#Pinyin').hide();}
 		if($('input[name=chkENGLISH]:checked').val()) {$('#English').show();} else {$('#English').hide();}
 		if($('input[name=chkENGLISH]:checked').val()) {$('#PartofSpeech').show();} else {$('#PartofSpeech').hide();}
@@ -173,78 +286,18 @@ function dispCard(action) {
 		setCookie("HSKLesson", $("#selLesson").val(), 120);
 	}
 }
-function getPinyinColor(col,trNum) {
-	if(trNum===null) { // Populate the flashcard
-		$('#Pinyin0').text('');
-		$('#Pinyin1').text('');
-		$('#Pinyin2').text('');
-		$('#Pinyin3').text('');
-		$('#Pinyin4').text('');
-		if(col[4]==="" || col[14]===-1){
-			$('#Pinyin0').text(col[3]);
-			$('#Pinyin0').removeClass();
-		} else {
-			var pinyin=col[4].replace(" ","");
-			var pinyinLen=col[13];
-			var offset=0;
-			for(x=0; x<col[13].length; x++) {
-				var pynTone=col[4].substr(x,1);
-				var pynLen=col[13].substr(x,1);
-				if(col[3].substr(offset,1)==" ") {
-					offset++;
-					$('#Pinyin'+x.toString()).append(" ");
-				}
-				if(col[3].substr(offset,1)=="'") {
-					offset++;
-					$('#Pinyin'+x.toString()).append("'");
-				}
-				$('#Pinyin'+x.toString()).append(col[3].substr(offset,pynLen));
-				$('#Pinyin'+x.toString()).removeClass();
-				$('#Pinyin'+x.toString()).addClass("tone"+pynTone);
-				offset=offset+parseInt(pynLen);
-			}
-		}
-	} else { // Populate the table (list)
-		$('#tr'+trNum+'0').text('');
-		$('#tr'+trNum+'1').text('');
-		$('#tr'+trNum+'2').text('');
-		$('#tr'+trNum+'3').text('');
-		$('#tr'+trNum+'4').text('');
-		if(col[4]==="" || col[14]===-1){
-			$('#tr'+trNum+'0').text(col[3]);
-			$('#tr'+trNum+'0').removeClass();
-		} else {
-			var pinyin=(col[4].replace(" ","")).replace("'","");
-			var pinyinLen=col[13];
-			var offset=0;
-			for(x=0; x<col[13].length; x++) {
-				var pynTone=col[4].substr(x,1);
-				var pynLen=col[13].substr(x,1);
-				if(col[3].substr(offset,1)==" ") {
-					offset++;
-					$('#tr'+trNum+x.toString()).append(" ");
-				}
-				if(col[3].substr(offset,1)=="'") {
-					offset++;
-					$('#tr'+trNum+x.toString()).append("'");
-				}
-				$('#tr'+trNum+x.toString()).append(col[3].substr(offset,pynLen));
-				$('#tr'+trNum+x.toString()).removeClass();
-				$('#tr'+trNum+x.toString()).addClass("tone"+pynTone);
-				offset=offset+parseInt(pynLen);
-			}
-		}
-	}
-}
 function populateTable(){
 	$("#listTab tr").remove();
 	$("#wordcount").html("");
 	for (i = 0; i < resultArray.length; i++) {
 		var col=resultArray[i].split("~");
-    	$('#listTab').append('<tr><td>'+col[7]+'.'+col[8]+'</td><td>'+col[1]+'</td><td>'
-    		+'<span id="tr'+i.toString()+'0"></span><span id="tr'+i.toString()+'1"></span><span id="tr'+i.toString()+'2"></span><span id="tr'+i.toString()+'3"></span><span id="tr'+i.toString()+'4"></span>'
-    		+'</td><td>'+col[5]+'&nbsp;<span class="posTab">'+col[6]+'</span></td></tr>');
-		getPinyinColor(col,i.toString());
+    	$('#listTab').append('<tr><td>'+col[23]+'.'+col[24]+'</td><td>'+col[1]+col[2]+col[3]+col[4]+col[5]+'</td><td>'
+    		+'<span class="tone'+col[6]+'">'+col[11]+'</span>'
+    		+'<span class="tone'+col[7]+'">'+col[12]+'</span>'
+    		+'<span class="tone'+col[8]+'">'+col[13]+'</span>'
+    		+'<span class="tone'+col[9]+'">'+col[14]+'</span>'
+    		+'<span class="tone'+col[10]+'">'+col[15]+'</span>'
+    		+'</td><td>'+col[21]+'&nbsp;<span class="posTab">'+col[22]+'</span></td></tr>');
 	}
 	$("#wordcount").html(resultArray.length+1);
 	$("#wordcount").append(" words");
@@ -274,14 +327,9 @@ function englishChecked() {
 }
 function hskChange() {
 	$('#HanziS').text('');
-	$('#Pinyin0').text('');
-	$('#Pinyin1').text('');
-	$('#Pinyin2').text('');
-	$('#Pinyin3').text('');
-	$('#Pinyin4').text('');
+	$('#Pinyin0, #Pinyin1, #Pinyin2, #Pinyin3, #Pinyin4').text('');
 	$('#English').text('');
 	$('#PartofSpeech').text('');
-	$('#selLesson').val(1);
 	var hsk=$("#selHSK").val();
 	if(hsk<3) {
 		$('select[name*="selLesson"] option[value="16"]').remove();
@@ -319,50 +367,16 @@ function getCookie(cname) {
     }
     return "";
 }
-/*
-class Swipe {
-    constructor(element) {
-        this.xDown = null;
-        this.yDown = null;
-        this.element = typeof(element) === 'string' ? document.querySelector(element) : element;
-        this.element.addEventListener('touchstart', function(evt) {
-            this.xDown = evt.touches[0].clientX;
-            this.yDown = evt.touches[0].clientY;
-        }.bind(this), false);
-    }
-    onLeft(callback) {this.onLeft = callback;return this;}
-    onRight(callback) {this.onRight = callback;return this;}
-    onUp(callback) {this.onUp = callback;return this;}
-    onDown(callback) {this.onDown = callback;return this;}
-    handleTouchMove(evt) {
-        if ( ! this.xDown || ! this.yDown ) {
-            return;
-        }
-        var xUp = evt.touches[0].clientX;
-        var yUp = evt.touches[0].clientY;
-        this.xDiff = this.xDown - xUp;
-        this.yDiff = this.yDown - yUp;
-        if ( Math.abs( this.xDiff ) > Math.abs( this.yDiff ) ) {
-            if ( this.xDiff > 0 ) {this.onLeft();} else {this.onRight();}
-        } else {
-            if ( this.yDiff > 0 ) {this.onUp();} else {this.onDown();}
-        }
-        this.xDown = null;
-        this.yDown = null;
-    }
-    run() {this.element.addEventListener('touchmove', function(evt) {this.handleTouchMove(evt).bind(this);}.bind(this), false);}
-}
-var swiper = new Swipe('#Card');
-swiper.onLeft(function() { dispCard("prev") });
-swiper.onRight(function() { dispCard("next") });
-swiper.run();
-*/
 function add() {	// Add to review list
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (request.readyState === 4) {
 			if (request.status === 200) {
 				$('#Views').append(request.responseText);
+				var col=resultArray[ID].split("~");
+				resultArray[ID]=col[0]+"~"+col[1]+"~"+col[2]+"~"+col[3]+"~"+col[4]+"~"+col[5]+"~"+col[6]+"~"+col[7]+"~"+col[8]
+								+"~"+col[9]+"~"+col[9]+"~"+col[11]+"~"+col[12]+"~"+col[13]+"~"+col[14]+'~';
+				$('#Delete').html("<button class='btn btn-danger btn-sm' onclick='del("+col[9]+")'>Remove from Review</button>");
 			}
 		}
 	};
@@ -376,10 +390,33 @@ function del(idToDel) {	// Remove from review list
 		if (request.readyState === 4) {
 			if (request.status === 200) {
 				$('#Delete').html("");
+				var col=resultArray[ID].split("~");
+				resultArray[ID]=col[0]+"~"+col[1]+"~"+col[2]+"~"+col[3]+"~"+col[4]+"~"+col[5]+"~"+col[6]+"~"+col[7]+"~"+col[8]
+								+"~"+col[9]+"~~"+col[11]+"~"+col[12]+"~"+col[13]+"~"+col[14]+'~';
+				dispCard("next");
 			}
 		}
 	};
 	var url='includes/deleteReview.php?id='+idToDel;
 	request.open('GET', url, true);
 	request.send();
+}
+function playAudio(pinyin) {
+var audio_markup='<audio id="audio_player" controls="" preload="auto"><source id="audio_src" src="https://www.stephenmccready.asia/mandarin/audio/'+pinyin+'.mp3?rnd='+Math.random().toString()+'" type="audio/mpeg"></audio>';
+	$("#audio_player_container").html(audio_markup);
+	var player = $("#audio_player"); 
+	player[0].play();
+}
+function playBAudio(pinyinAud1,pinyinAud2,charCount) {
+	console.log(pinyinAud1+" ~ "+charCount);
+	console.log(pinyinAud2+" ~ "+charCount);
+	if(charCount>1) {
+		var audio_markup='<audio id="audio_player" controls="" preload="auto"><source id="audio_src" src="https://ss0.baidu.com/6KAZsjip0QIZ8tyhnq/text2audio?tex='+pinyinAud1+'&cuid=dict&lan=ZH&ctp=1&pdt=30&vol=9&spd=4\" type="audio/mpeg"></audio>';
+	} else {
+		//https://appcdn.fanyi.baidu.com/zhdict/mp3/guan1.mp3
+		var audio_markup='<audio id="audio_player" controls="" preload="auto"><source id="audio_src" src="https://appcdn.fanyi.baidu.com/zhdict/mp3/'+pinyinAud2+'.mp3" type="audio/mpeg"></audio>';
+	}
+	$("#audio_player_container").html(audio_markup);
+	var player = $("#audio_player"); 
+	player[0].play();
 }
