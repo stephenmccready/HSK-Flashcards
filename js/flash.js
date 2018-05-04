@@ -275,7 +275,7 @@ function dispCard(action) {
 		var dispID=ID+1;
 		$('#footCenter').text(dispID.toString() + ' of ' + arrLen.toString());
 		if(col[26]!=='')	{
-			$('#Delete').html("<button class='btn btn-danger btn-sm' onclick='del("+col[10]+")'>Remove from Review</button>");
+			$('#Delete').html("<button class='btn btn-danger btn-sm' onclick='del("+col[26]+")'>Remove from Review</button>");
 		} else {
 			$('#Delete').html("");
 		}
@@ -378,9 +378,11 @@ function add() {	// Add to review list
 			if (request.status === 200) {
 				$('#Views').append(request.responseText);
 				var col=resultArray[ID].split("~");
-				resultArray[ID]=col[0]+"~"+col[1]+"~"+col[2]+"~"+col[3]+"~"+col[4]+"~"+col[5]+"~"+col[6]+"~"+col[7]+"~"+col[8]
-								+"~"+col[9]+"~"+col[9]+"~"+col[11]+"~"+col[12]+"~"+col[13]+"~"+col[14]+'~';
-				$('#Delete').html("<button class='btn btn-danger btn-sm' onclick='del("+col[9]+")'>Remove from Review</button>");
+				resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
+						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~'+col[14]+'~'+
+						col[15]+'~'+col[16]+'~'+col[17]+'~'+col[18]+'~'+col[19]+'~'+col[20]+'~'+col[21]+'~'+col[22]+'~'+col[23]+'~'+
+						col[24]+'~'+col[25]+'~'+col[26]+'~'+col[27]+'~';
+				$('#Delete').html("<button class='btn btn-danger btn-sm' onclick='del("+col[25]+")'>Remove from Review</button>");
 			}
 		}
 	};
@@ -395,8 +397,10 @@ function del(idToDel) {	// Remove from review list
 			if (request.status === 200) {
 				$('#Delete').html("");
 				var col=resultArray[ID].split("~");
-				resultArray[ID]=col[0]+"~"+col[1]+"~"+col[2]+"~"+col[3]+"~"+col[4]+"~"+col[5]+"~"+col[6]+"~"+col[7]+"~"+col[8]
-								+"~"+col[9]+"~~"+col[11]+"~"+col[12]+"~"+col[13]+"~"+col[14]+'~';
+				resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
+						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~'+col[14]+'~'+
+						col[15]+'~'+col[16]+'~'+col[17]+'~'+col[18]+'~'+col[19]+'~'+col[20]+'~'+col[21]+'~'+col[22]+'~'+col[23]+'~'+
+						col[24]+'~'+col[25]+'~'+col[26]+'~'+col[27]+'~';
 				dispCard("next");
 			}
 		}
@@ -405,19 +409,10 @@ function del(idToDel) {	// Remove from review list
 	request.open('GET', url, true);
 	request.send();
 }
-function playAudio(pinyin) {
-var audio_markup='<audio id="audio_player" controls="" preload="auto"><source id="audio_src" src="https://www.stephenmccready.asia/mandarin/audio/'+pinyin+'.mp3?rnd='+Math.random().toString()+'" type="audio/mpeg"></audio>';
-	$("#audio_player_container").html(audio_markup);
-	var player = $("#audio_player"); 
-	player[0].play();
-}
 function playBAudio(pinyinAud1,pinyinAud2,charCount) {
-	console.log(pinyinAud1+" ~ "+charCount);
-	console.log(pinyinAud2+" ~ "+charCount);
 	if(charCount>1) {
 		var audio_markup='<audio id="audio_player" controls="" preload="auto"><source id="audio_src" src="https://ss0.baidu.com/6KAZsjip0QIZ8tyhnq/text2audio?tex='+pinyinAud1+'&cuid=dict&lan=ZH&ctp=1&pdt=30&vol=9&spd=4\" type="audio/mpeg"></audio>';
 	} else {
-		//https://appcdn.fanyi.baidu.com/zhdict/mp3/guan1.mp3
 		var audio_markup='<audio id="audio_player" controls="" preload="auto"><source id="audio_src" src="https://appcdn.fanyi.baidu.com/zhdict/mp3/'+pinyinAud2+'.mp3" type="audio/mpeg"></audio>';
 	}
 	$("#audio_player_container").html(audio_markup);
