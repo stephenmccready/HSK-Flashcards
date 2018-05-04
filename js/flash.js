@@ -141,6 +141,10 @@ function dispCard(action) {
 			w=75;
 			h=75;
 			$(".ani").height("75px");
+		} else if(wSize<1024) {
+			w=100;
+			h=100;
+			$(".ani").height("100px");
 		}
 		var strokeCol1="#808080";
 		switch (col[6]) {
