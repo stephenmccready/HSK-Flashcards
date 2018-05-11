@@ -15,7 +15,7 @@ button.btn-audio{margin-left:0.5em;margin-right:0.5em;margin-top:0.5em;}
 #Pinyin{font-weight: bold;}
 #Views {text-align:center;font-size:1.05em;color:#6f93c3;width:100%;padding-top:0em;}
 #footCenter{color:#B0C4DE;font-size:1.25em;margin-left:0.5%;margin-right:0.5%;}
-.btn-huge {font-size:125% !important;margin:.25em;min-width:3em !important;}
+.btn-huge {font-size:125% !important;margin:.25em !important;min-width:2.75em !important;padding:.225em !important;}
 .pyn {color:purple;}
 .pos {color:#B0C4DE;display:none;}
 .posTab {color:#B0C4DE;}
@@ -23,8 +23,8 @@ p.chk {margin-top:12px;}
 #List{display:none;overflow:auto;border:1px solid #DCDCDC;}
 #listTab{border-bottom:1px solid #DCDCDC;}
 @media all and (min-width:769px) {
-	#Card{width:50% !important;margin-left:25% !important;margin-right:25% !important;height:32em !important;}
-	#List{width:50%;margin-left:25%;margin-right:25%;margin-top:32px;height:40em;overflow:auto;}	
+	#Card{width:60% !important;margin-left:20% !important;margin-right:20% !important;height:32em !important;}
+	#List{width:60%;margin-left:20%;margin-right:20%;margin-top:32px;height:40em;overflow:auto;}	
 }
 @media all and (min-width:621px) and (max-width:768px) {
 	#Card{width:80% !important;margin-left:10% !important;margin-right:10% !important;height:42em !important;}
@@ -68,3 +68,5 @@ td:nth-child(4) {width:50%;padding:0px 0px 0px 0px !important;}
 .table-borderless{border:none !important;}
 .table-borderless td{border:none !important;}
 svg {display:inline-block !important;margin:0 auto !important;text-align: center !important;}
+#copied-container {position: absolute; left: 50%;}
+#copied {display: none; font-size: 1.5em; background-color:#DCDCDC; position: relative; left: -50%; margin-top: 10%; opacity: 0.95; filter: alpha(opacity=95);}
