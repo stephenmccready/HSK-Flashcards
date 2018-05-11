@@ -1,7 +1,7 @@
 # HSK-Flashcards
 HSK (Hànyǔ Shuǐpíng Kǎoshì 汉语水平考试) flashcard app for learning Chinese (Mandarin).
 
-Based on HSK levels.
+Based on HSK levels. Includes Hanzi stroke order, audio, pinyin, pinyin color coding and English translation.
 
 Demo <a href="http://stephenmccready.asia/mi/flash.php">here</a>
 
