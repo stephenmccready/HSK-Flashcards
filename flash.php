@@ -63,16 +63,18 @@ include_once 'includes/db_connect.php';
 		<label class="checkbox-inline"><input type="checkbox" name="chkRANDOM" onclick="$('#Pinyin').hide();$('#English').hide();$('#PartofSpeech').hide(); dispCard();">Random</label>
 		<label class="checkbox-inline"><input type="checkbox" name="chkPINYIN" onclick="pinyinChecked();">Pinyin</label>
 		<label class="checkbox-inline"><input type="checkbox" name="chkENGLISH" onclick="englishChecked();">English</label>
+		<label class="checkbox-inline"><input type="checkbox" name="chkSOUND" onclick="soundChecked();">Audio only</label>
 	</p>
 	</div>
     <div class="main clearfix">
 		<div id="List" class="clearfix">
-			<table id="listTab" class="table table-responsive table-condensed table-hover table-striped"><tbody></tbody></table>
+			<table id="listTab" class="table table-responsive table-condensed table-hover table-striped table-borderless"><tbody></tbody></table>
 			<span id="wordcount" class="posTab"></span><br/><br/>
 		</div>
     	<div id="Card">
     		<div class="loader">Loading</div>
 			<div id="animation" class="clearfix">
+				<div id="copied-container"><div id="copied"></div></div>
 				<div id="ani-container" class="clearfix"><div id="HanziAni0" class="ani"></div><div id="HanziAni1" class="ani"></div><div id="HanziAni2" class="ani"></div><div id="HanziAni3" class="ani"></div><div id="HanziAni4" class="ani"></div></div>
 			</div>
 			<div id="animation-buttons" class="clearfix">
@@ -86,12 +88,12 @@ include_once 'includes/db_connect.php';
 			<div class="clearfix" id="Audio"></div>
 			<div id="audio_player_container"></div>
 			<div class="clearfix" id="Views"></div>
+			<div class="clearfix" id="Delete"></div>
 			<div class="clearfix" id="Pinyin">
 			<span id="Pinyin0"></span><span id="Pinyin1"></span><span id="Pinyin2"></span><span id="Pinyin3"></span><span id="Pinyin4"></span>
 			</div>
 			<div class="clearfix" id="English"></div>
 			<div class="clearfix pos" id="PartofSpeech"></div>
-			<div class="clearfix" id="Delete"></div>
 			<input type="text" hidden id="DBID"/>
 			<input type="text" hidden id="HSK"/>
 		</div>
@@ -106,9 +108,10 @@ include_once 'includes/db_connect.php';
 	<button type="button" class="btn btn-info btn-huge" onclick="dispCard('last');"><span class="glyphicon glyphicon-fast-forward"></span></button>
 	<div class="clearfix"></div>
 	<div class="clearfix">
+		<button class="btn btn-default btn-huge" onclick="$('#animation').toggle();$('#animation-buttons').toggle();">Han</button>
 		<button class="btn btn-default btn-huge" onclick="$('#Pinyin').toggle();">Pyn</button>
 		<button class="btn btn-default btn-huge" onclick="$('#English').toggle();$('#PartofSpeech').toggle();">Eng</button>
-		<button class="btn btn-warning btn-huge" onclick="add();">Review</button>
+		<button class="btn btn-warning btn-huge" onclick="add();">Rev</button>
 		<button class="btn btn-success btn-huge" onclick="knowIt();"><span class="glyphicon glyphicon-ok"></span></button>
 		<button class="btn btn-danger btn-huge" onclick="dispCard();"><span class="glyphicon glyphicon-remove"></span></button>
 	</div>
@@ -118,3 +121,5 @@ include_once 'includes/db_connect.php';
 <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
 <script src="js/bootstrap-toggle.min.js"></script>
 <script src="js/flash.js"></script>
+</body>
+</html>
