@@ -12,6 +12,27 @@ window.cookieconsent.initialise({
     }
   }
 })});
+var copyHanzi = document.querySelector('#animation');
+copyHanzi.addEventListener('click', function(event) {
+	var clipboard = new ClipboardJS('#animation', {
+    text: function() {
+    	var col=resultArray[ID].split("~");
+    	$("#copied").text(col[1]+col[2]+col[3]+col[4]+col[5]+" copied to clipboard");
+    	$("#copied").show().delay(50).fadeOut(2000);
+        return col[1]+col[2]+col[3]+col[4]+col[5];
+    }
+	});
+});
+copyHanzi.addEventListener('touchend', function(event) {
+	var clipboard = new ClipboardJS('#animation', {
+    text: function() {
+    	var col=resultArray[ID].split("~");
+    	$("#copied").text(col[1]+col[2]+col[3]+col[4]+col[5]+" copied to clipboard");
+    	$("#copied").show().delay(50).fadeOut(2000);
+        return col[1]+col[2]+col[3]+col[4]+col[5];
+    }
+	});
+});
 var HSKLevelCookie;
 var HSKLessonCookie;
 var AudioHanzi='';
@@ -38,10 +59,10 @@ $('#myform :checkbox').change(function() {
 	}
 });
 var resultArray;
-var ID=0;
+var ID;
+var holdID;
 function LoadFlashCards() {
 	$('.loader').show();
-	$('#HanziS').text('');
 	$('#Pinyin0, #Pinyin1, #Pinyin2, #Pinyin3, #Pinyin4').text('');
 	$('#PartofSpeech').text('');
 	$('#English').html('');
@@ -52,16 +73,19 @@ function LoadFlashCards() {
 		if (request.readyState === 4) {
 			if (request.status === 200) {
 				if(request.responseText==="") {
-					$('#HanziAni0').text("🚧");
+					$('#HanziAni0, #HanziAni1, #HanziAni2, #HanziAni3, #HanziAni4').html("&#128679");
+					$("#div-ani0, #div-ani1, #div-ani2, #div-ani3, #div-ani4").hide();
 					$('#Pinyin0, #Pinyin1, #Pinyin2, #Pinyin3, #Pinyin4').text('');
 					$('#PartofSpeech').text('');
+					$('#Pinyin').text('');
 					$('#English').html("No cards for this criteria available.");
 					$('#Audio').html('');
 					$('#Views').text('');
 					$('#English').show();
 					$('.loader').hide();
 					resultArray = [];
-					$('#List').html("🚧 <br/>No cards for this criteria available.");
+					$("#listTab tr").remove();
+					$("#wordcount").html("&#128679 <br/>No cards for this criteria available.");
 				} else {
 					var result = request.responseText;
 					var resultLen = result.length;
@@ -69,9 +93,10 @@ function LoadFlashCards() {
 					result = result.substr(0, resultLen);
 					resultArray = result.split("|");
 					ID=0;
+					holdID=999999;
 					$('.loader').hide();
-					dispCard('first');
 					populateTable();
+					dispCard('first');
 				}
 			}
 		}
@@ -81,14 +106,11 @@ function LoadFlashCards() {
 	request.send();
 }
 function dispCard(action) {
-	$("#HanziAni0").html("");$("#HanziAni1").html("");$("#HanziAni2").html("");$("#HanziAni3").html("");$("#HanziAni4").html("");
 	var arrLen=resultArray.length;
-	$('#HanziS').text("");
-	$('#StrokeOrder').text('');
-	$('#Audio').html('');
-	$('#OnRevList').text("");
 	if(arrLen===0) {
-		$('#HanziS').text("👍");
+		$('#HanziAni0').html("&#128077");
+		$('#HanziAni1, #HanziAni2, #HanziAni3, #HanziAni4').html("");
+		$("#div-ani0, #div-ani1, #div-ani2, #div-ani3, #div-ani4").hide();
 		var hsk=$("#selHSK").val();
 		var l=$("#selLesson").val();
 		if( (hsk<3 && l<15) || (hsk>2 && l<20) ){
@@ -132,6 +154,12 @@ function dispCard(action) {
 				}
 			}
 		}
+	if(holdID!==ID) {
+		holdID=ID;
+		$("#HanziAni0").html("");$("#HanziAni1").html("");$("#HanziAni2").html("");$("#HanziAni3").html("");$("#HanziAni4").html("");
+		$('#StrokeOrder').text('');
+		$('#Audio').html('');
+		$('#OnRevList').text("");
 		var row=resultArray[ID];
 		lastID=ID;
 		var col=row.split("~");
@@ -208,7 +236,8 @@ function dispCard(action) {
 			writer4.setCharacter(col[5]);
 			$("#btn-ani4").css("color", strokeCol5);
 			y++;
-		} 
+		}
+		$("#div-ani0").show();
 		if(y==1){
 			$("#HanziAni0, #div-ani0").width("100%");$("#HanziAni1, #div-ani1").width("0%");
 			$("#HanziAni2, #div-ani2").width("0%");$("#HanziAni3, #div-ani3").width("0%");
@@ -260,7 +289,7 @@ function dispCard(action) {
 			AudioHanzi2=AudioHanzi2+col[20];
 			hanziSize=5;
 		}
-		$('#Audio').append('<button class="btn btn-default btn-sm btn-audio" onclick="playBAudio(\''+AudioHanzi1+'\',\''+AudioHanzi2+'\','+hanziSize+')"><span class="glyphicon glyphicon-volume-up"></span></button>');
+		$('#Audio').append('<button class="btn btn-default btn-sm btn-audio" onclick="playBAudio(\''+AudioHanzi1.toLowerCase()+'\',\''+AudioHanzi2.toLowerCase()+'\','+hanziSize+')"><span class="glyphicon glyphicon-volume-up"></span></button>');
 		$('#Pinyin').html('<span class="tone'+col[6]+'">'+col[11]+'</span>'
     		+'<span class="tone'+col[7]+'">'+col[12]+'</span>'
     		+'<span class="tone'+col[8]+'">'+col[13]+'</span>'
@@ -286,6 +315,12 @@ function dispCard(action) {
 		if($('input[name=chkPINYIN]:checked').val()) {$('#Pinyin').show();} else {$('#Pinyin').hide();}
 		if($('input[name=chkENGLISH]:checked').val()) {$('#English').show();} else {$('#English').hide();}
 		if($('input[name=chkENGLISH]:checked').val()) {$('#PartofSpeech').show();} else {$('#PartofSpeech').hide();}
+		if($('input[name=chkSOUND]:checked').val()) {
+			$('#animation').hide();
+			$('#animation-buttons').hide();
+			playBAudio(AudioHanzi1.toLowerCase(),AudioHanzi2.toLowerCase(),hanziSize);
+		}
+	}
 		setCookie("HSKLevel", $("#selHSK").val(), 120);
 		setCookie("HSKLesson", $("#selLesson").val(), 120);
 	}
@@ -295,15 +330,20 @@ function populateTable(){
 	$("#wordcount").html("");
 	for (i = 0; i < resultArray.length; i++) {
 		var col=resultArray[i].split("~");
-    	$('#listTab').append('<tr><td>'+col[23]+'.'+col[24]+'</td><td>'+col[1]+col[2]+col[3]+col[4]+col[5]+'</td><td>'
+    	$('#listTab').append('<tr><td>'+col[23]+'.'+col[24]+'</td><td>'
+    		+'<span class="tone'+col[6]+'">'+col[1]+'</span>'
+    		+'<span class="tone'+col[7]+'">'+col[2]+'</span>'
+    		+'<span class="tone'+col[8]+'">'+col[3]+'</span>'
+    		+'<span class="tone'+col[9]+'">'+col[4]+'</span>'
+    		+'<span class="tone'+col[10]+'">'+col[5]+'</span>'+'</td><td>'
     		+'<span class="tone'+col[6]+'">'+col[11]+'</span>'
     		+'<span class="tone'+col[7]+'">'+col[12]+'</span>'
     		+'<span class="tone'+col[8]+'">'+col[13]+'</span>'
     		+'<span class="tone'+col[9]+'">'+col[14]+'</span>'
-    		+'<span class="tone'+col[10]+'">'+col[15]+'</span>'
-    		+'</td><td>'+col[21]+'&nbsp;<span class="posTab">'+col[22]+'</span></td></tr>');
+    		+'<span class="tone'+col[10]+'">'+col[15]+'</span>'+'</td><td>'
+    		+col[21]+'&nbsp;<span class="posTab">'+col[22]+'</span></td></tr>');
 	}
-	$("#wordcount").html(resultArray.length+1);
+	$("#wordcount").html(resultArray.length);
 	$("#wordcount").append(" words");
 }
 function knowIt() {
@@ -327,6 +367,15 @@ function englishChecked() {
 	} else {
 		$('#English').hide();
 		$('#PartofSpeech').hide();
+	}
+}
+function soundChecked() {
+	if($('input[name=chkSOUND]:checked').val()) {
+		$('#animation').hide();
+		$('#animation-buttons').hide();
+	} else {
+		$('#animation').show();
+		$('#animation-buttons').show();
 	}
 }
 function hskChange() {
@@ -401,6 +450,9 @@ function del(idToDel) {	// Remove from review list
 						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~'+col[14]+'~'+
 						col[15]+'~'+col[16]+'~'+col[17]+'~'+col[18]+'~'+col[19]+'~'+col[20]+'~'+col[21]+'~'+col[22]+'~'+col[23]+'~'+
 						col[24]+'~'+col[25]+'~'+col[26]+'~'+col[27]+'~';
+    			$("#copied").text(col[1]+col[2]+col[3]+col[4]+col[5]+" removed from review");
+    			$("#copied").show().delay(50).fadeOut(2000);
+    			resultArray.splice(ID, 1);
 				dispCard("next");
 			}
 		}
