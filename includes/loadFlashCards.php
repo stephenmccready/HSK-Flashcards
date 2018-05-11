@@ -2,7 +2,12 @@
 include_once 'db_connect.php';
 $sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H ";
 if($_GET["Lesson"]=="Review") {
-	$sql.=" JOIN Review AS R ON R.ID=H.ID WHERE H.HSK=" . $_GET["HSK"];	
+	$sql.=" JOIN Review AS R ON R.ID=H.ID";
+	if($_GET["HSK"]!="All") {
+		$sql.=" WHERE H.HSK=" . $_GET["HSK"];
+	}
+} else if($_GET["Lesson"]=="Review" && $_GET["HSK"]=="All") {
+	$sql.=" JOIN Review AS R ON R.ID=H.ID";
 } else if($_GET["HSK"]!="All") {
 	$sql.=" LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE H.HSK = " . $_GET["HSK"];	
 	if($_GET["Lesson"]=="Verbs") {
@@ -31,7 +36,11 @@ if($_GET["Lesson"]=="Review") {
 		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID";
 	}
 }
-$sql.= " Order By H.HSK,CAST(Chapter AS UNSIGNED)";
+if($_GET["Lesson"]!="All") {
+	$sql.= " Order By H.ID";
+} else {
+	$sql.= " Order By H.HSK,CAST(Chapter AS UNSIGNED),H.ID";
+}
 $result=mysqli_query($mysqli,$sql);
 mysqli_fetch_all($result,MYSQLI_ASSOC);
 $rowNum=0;
@@ -53,8 +62,7 @@ foreach ($result as $row) {
 	$Hanzi=array();
 	$offset=0;
 	for($i=0; $i<5; $i++) {
-		if(mb_substr($row["HanziS"],$offset,1)=="(") {
-			$Hanzi[$i]=mb_substr($row["HanziS"],$offset,1);
+		if(mb_substr($row["HanziS"],$offset,1)=="(" || mb_substr($row["HanziS"],$offset,1)==")") {
 			$offset++;
 		}
 		$Hanzi[$i]=mb_substr($row["HanziS"],$offset,1);
