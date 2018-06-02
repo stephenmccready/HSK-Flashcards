@@ -11,25 +11,49 @@ if($_GET["Lesson"]=="Review") {
 } else if($_GET["HSK"]!="All") {
 	$sql.=" LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE H.HSK = " . $_GET["HSK"];	
 	if($_GET["Lesson"]=="Verbs") {
-		$sql.= " AND (PartOfSpeech = 'verb' or PartOfSpeech = 'verb/noun')";
+		$sql.= " AND (PartOfSpeech = 'verb' or PartOfSpeech = 'verb/noun' or PartOfSpeech = 'modal verb')";
 	} elseif($_GET["Lesson"]=="Nouns") {
 		$sql.= " AND (PartOfSpeech = 'noun' or PartOfSpeech = 'verb/noun')";
 	} elseif($_GET["Lesson"]=="Adjectives") {
 		$sql.= " AND PartOfSpeech = 'adjective'";
 	} elseif($_GET["Lesson"]=="Adverbs") {
 		$sql.= " AND PartOfSpeech = 'adverb'";
+	} elseif($_GET["Lesson"]=="MeasureWords") {
+		$sql.= " AND PartOfSpeech = 'measure word'";
+	} elseif($_GET["Lesson"]=="Numbers") {
+		$sql.= " AND PartOfSpeech = 'number'";
+	} elseif($_GET["Lesson"]=="Particles") {
+		$sql.= " AND PartOfSpeech = 'particle'";
+	} elseif($_GET["Lesson"]=="Pronouns") {
+		$sql.= " AND PartOfSpeech = 'pronoun'";
+	} elseif($_GET["Lesson"]=="ProperNouns") {
+		$sql.= " AND PartOfSpeech = 'proper noun'";
+	} elseif($_GET["Lesson"]=="Radicals") {
+		$sql.= " AND PartOfSpeech = 'radical'";
 	} elseif($_GET["Lesson"]!="All") {
 		$sql.= " AND Chapter = " . $_GET["Lesson"];
 	}
 } else {
 	if($_GET["Lesson"]=="Verbs") {
-		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE (PartOfSpeech = 'verb' or PartOfSpeech = 'verb/noun')";
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE (PartOfSpeech = 'verb' or PartOfSpeech = 'verb/noun' or PartOfSpeech = 'modal verb')";
 	} elseif($_GET["Lesson"]=="Nouns") {
 		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE (PartOfSpeech = 'noun' or PartOfSpeech = 'verb/noun')";
 	} elseif($_GET["Lesson"]=="Adjectives") {
 		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'adjective'";
 	} elseif($_GET["Lesson"]=="Adverbs") {
 		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'adverb'";
+	} elseif($_GET["Lesson"]=="MeasureWords") {
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'measure word'";
+	} elseif($_GET["Lesson"]=="Numbers") {
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'number'";
+	} elseif($_GET["Lesson"]=="Particles") {
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'particle'";
+	} elseif($_GET["Lesson"]=="Pronouns") {
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'pronoun'";
+	} elseif($_GET["Lesson"]=="ProperNouns") {
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'proper noun'";
+	} elseif($_GET["Lesson"]=="Radicals") {
+		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE PartOfSpeech = 'radical'";
 	} else if($_GET["Lesson"]!="All") {
 		$sql.= " LEFT OUTER JOIN Review AS R ON R.ID=H.ID WHERE Chapter = " . $_GET["Lesson"];
 	} else {
