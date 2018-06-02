@@ -1,15 +1,26 @@
 <?php
 include_once 'db_connect.php';
 if(preg_match("/\p{Han}+/u",  $_GET["search"])) {
-	$searchfield="HanziS";
+	$searchfield="HanziS";$utf8="";
 } else if(preg_match("/[āēīōūǖáéíóúǘǎěǐǒǔǚàèìòùǜ]/u",  $_GET["search"])) {
-	$searchfield="Pinyin";
+	$searchfield="Pinyin";$utf8=" collate utf8_bin";
 } else if(preg_match("/[012345]/u",  $_GET["search"])) {
-	$searchfield="PinyinNum";
+	$searchfield="PinyinNum";$utf8="";
 } else {
-	$searchfield="English";
+	$searchfield="English";$utf8="";
 }
-$sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $searchfield . " Like '%" . $_GET["search"] . "%'";
+if($_GET["case"]=="false") {
+	$case1="lcase(";
+	$case2=")";
+} else {
+	$case1="";
+	$case2="";
+}
+if($_GET["exact"]=="true") {
+	$sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " = " . $case1 . "'" . $_GET["search"] . "'" . $case2 . $utf8;
+} else {
+	$sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " Like " . $case1 . "'%" . $_GET["search"] . "%'" . $case2 . $utf8;
+}
 $result=mysqli_query($mysqli,$sql);
 mysqli_fetch_all($result,MYSQLI_ASSOC);
 $rowNum=0;
