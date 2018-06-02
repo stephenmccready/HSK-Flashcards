@@ -1,38 +1,61 @@
-* {margin:0;}
-html, body {height:100%;padding:0 !important;}
+*{margin:0;}
+html,body{height:100%;padding:0 !important;}
+html {overflow: -moz-scrollbars-vertical; overflow-y: scroll;}
 .header {width:100%;}
-.wrapper {width:100%;min-height:99%;height:auto !important;height:99%;margin:0 auto -95px;text-align:center;padding-top:6px;}
-.footer {width:100%;height:95px;text-align:center;z-index:999;position:relative;background-color:#FFF;}
+.wrapper {width:100%;min-height:99%;height:auto !important;height:99%;margin:0 auto -80px;text-align:center;padding-top:6px;}
+.footer {width:100%;height:80px;text-align:center;z-index:999;position:relative;background-color:#FFF;}
+#divHSK,#divLesson,#divSearch,#divSettings{display:none;margin-top: 0.5em;margin-bottom: 0.5em;}
+#divHSK label{margin:.25em;}
+#divLesson label{margin:.25em;}
+#divOptions{margin-top: 0.5em;margin-bottom: 0.5em;}
 #Card{border-left:1px solid #000;border-right:3px solid #000;border-top:1px solid #000;border-bottom:3px solid #000;border-radius:11px;-webkit-border-radius:11px;overflow-y:auto;background-color:#F5F5F5;width:80%;margin-left:10%;margin-right:10%;overflow-x:hidden;}
 #animation {width:100%;text-align:center;margin:0 auto;display:inline-block;}
 #animation-buttons {width:100%;text-align:center;margin:0 auto;display:inline-block;}
-#ani-container {display:inline-block;text-align:center;margin:0 auto;}
+#animation-buttons div{width: 0;}
+#ani-container {display:inline-block;text-align:center;margin:0 auto;flex-shrink: 0;}
 .ani {float:left;display:inline-block;text-align:center;margin:0 auto;}
 .div-btn {float:left;display:inline-block;text-align:center;margin:0 auto;}
 a.btn-stroke-order{margin-left:0.25em;margin-right:0.25em;}
 button.btn-audio{margin-left:0.5em;margin-right:0.5em;margin-top:0.5em;}
-#Pinyin, #English, #PartofSpeech{text-align:center;font-size:1.7em;width:98%;}
+#Pinyin, #English, #PartofSpeech{text-align:center;font-size:1.5em;width:98%;}
 #Pinyin{font-weight: bold;}
 #Views {text-align:center;font-size:1.05em;color:#6f93c3;width:100%;padding-top:0em;}
 #footCenter{color:#B0C4DE;font-size:1.25em;margin-left:0.5%;margin-right:0.5%;}
-.btn-huge {font-size:125% !important;margin:.25em !important;min-width:2.75em !important;padding:.225em !important;}
+.btn-huge {font-size:125% !important;margin:.2em !important;min-width:2.75em !important;padding:.2em !important;}
 .pyn {color:purple;}
 .pos {color:#B0C4DE;display:none;}
-.posTab {color:#B0C4DE;}
-p.chk {margin-top:12px;}
+p.chk {margin-top:0.05em;}
 #List{display:none;overflow:auto;border:1px solid #DCDCDC;}
 #listTab{border-bottom:1px solid #DCDCDC;}
-@media all and (min-width:769px) {
-	#Card{width:60% !important;margin-left:20% !important;margin-right:20% !important;height:32em !important;}
-	#List{width:60%;margin-left:20%;margin-right:20%;margin-top:32px;height:40em;overflow:auto;}	
+#listTab td{vertical-align: middle !important;}
+#listTab .btn-xs {margin-bottom: 6px;}
+.colPinyin{display:none;}
+.colEnglish{display:none;}
+.colPOS {color:#B0C4DE;display:none;}
+.toggleBox{text-align:right;}
+@media all and (min-width:1024px) {
+	#Card{width:60% !important;margin-left:20% !important;margin-right:20% !important;height:33em !important;}
+	#List{width:60%;margin-left:20%;margin-right:20%;height:39em;overflow:auto;}
+	#divSettings,#divSearch,#divHSK,#divLesson{width:60%;margin-left:20%;margin-right:20%;}
+	.checkboxLabel{width:40%;text-align:left;}
+	.toggleBox{width:20%;}
+	.hanzi{font-size:8em;width:100%;text-align:center;}
 }
-@media all and (min-width:621px) and (max-width:768px) {
-	#Card{width:80% !important;margin-left:10% !important;margin-right:10% !important;height:42em !important;}
-	#List{width:70%;margin-left:15%;margin-right:15%;margin-top:32px;height:42em;overflow:auto;font-size:125% !important;}	
+@media all and (min-width:621px) and (max-width:1023px) {
+	#Card{width:80% !important;margin-left:10% !important;margin-right:10% !important;height:33em !important;}
+	#List{width:70%;margin-left:15%;margin-right:15%;height:41em;overflow:auto;font-size:125% !important;}
+	#divSettings,#divSearch,#divHSK,#divLesson{width:70%;margin-left:15%;margin-right:15%;}
+	.checkboxLabel{width:40%;text-align:left;}
+	.toggleBox{width:30%;}
+	.hanzi{font-size:8em;width:100%;text-align:center;}
 }
 @media all and (max-width:620px) {
-	#Card{width:95% !important;margin-left:2.5% !important;margin-right:2.5% !important;height:26em !important}
-	#List{width:100%;margin-left:0%;margin-right:0%;margin-top:6px;height:35em;}	
+	#Card{width:95% !important;margin-left:2.5% !important;margin-right:2.5% !important;height:27em !important}
+	#List{width:100%;margin-left:0%;margin-right:0%;height:34em;}	
+	#divSettings,#divSearch,#divHSK,#divLesson{width:95%;margin-left:2.5%;margin-right:2.5%;}
+	.checkboxLabel{width:60%;text-align:left;}
+	.toggleBox{width:35%;}
+	.hanzi{font-size:4em;width:100%;text-align:center;}
 }
 .loader {
 	position:absolute;left:50%;top:45%;
@@ -47,6 +70,14 @@ p.chk {margin-top:12px;}
 	animation:spin 2s linear infinite;
 	display:none;
 }
+.tinyLoader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #000;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+}
 @-webkit-keyframes spin {
 	0% { -webkit-transform:rotate(0deg);}
 	100% { -webkit-transform:rotate(360deg);}
@@ -56,9 +87,10 @@ p.chk {margin-top:12px;}
 	100% { transform:rotate(360deg);}
 }
 td:nth-child(1) {width:7%;font-size:80%;padding:0px 0px 0px 2px !important;}
-td:nth-child(2) {width:18%;font-size:120%;padding:0px 0px 0px 0px !important;}
+td:nth-child(2) {width:28%;font-size:125%;padding:0px 0px 0px 0px !important;}
 td:nth-child(3) {width:25%;padding:0px 0px 0px 0px !important;}
-td:nth-child(4) {width:50%;padding:0px 0px 0px 0px !important;}
+td:nth-child(4) {width:35%;padding:0px 0px 0px 0px !important;}
+td:nth-child(5) {width:5%;padding:0px 0px 0px 0px !important;}
 .tone1 {color: red;}
 .tone2 {color: green;}
 .tone3 {color: blue;}
@@ -70,3 +102,18 @@ td:nth-child(4) {width:50%;padding:0px 0px 0px 0px !important;}
 svg {display:inline-block !important;margin:0 auto !important;text-align: center !important;}
 #copied-container {position: absolute; left: 50%;}
 #copied {display: none; font-size: 1.5em; background-color:#DCDCDC; position: relative; left: -50%; margin-top: 10%; opacity: 0.95; filter: alpha(opacity=95);}
+#random-container {position:relative;top:0.5em;width:100%;display:block;height:2.5em;}
+#random-glyph {font-size:130%;width:5%;margin-right:40.5%;margin-left:2%;display:inline;text-align:left;}
+.random-off {color:#DCDCDC !important;}
+.random-on {color:#449d44 !important;}
+#review-glyph {font-size:130%;width:5%;margin-left:40.5%;margin-right:2%;display:inline;text-align:right;}
+.review-off {color:#DCDCDC !important;}
+.review-on {color:#ec971f !important;}
+#copy-glyph {font-size:130%;width:5%;display:inline;text-align:center;}
+.han{display:none;}
+#myform2{margin-top:0.5em;margin-bottom:0.5em;}
+#cardButton{display:none;}
+.divclose {width:100%; text-align: right; padding-right: .5em;}
+.checkboxLabel,.toggleBox{display:inline-block;}
+#holdLesson,#holdHSK{display:none;}
+div.disabled{color:#B0B0B0;}
