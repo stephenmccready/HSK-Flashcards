@@ -1,6 +1,6 @@
 <?php
 include_once 'db_connect.php';
-$sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H ";
+$sql="SELECT DISTINCT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H ";
 if($_GET["Lesson"]=="Review") {
 	$sql.=" JOIN Review AS R ON R.ID=H.ID";
 	if($_GET["HSK"]!="All") {
@@ -79,7 +79,12 @@ foreach ($result as $row) {
 	$PinyinStr=str_replace(" ","",$row["Pinyin"]);
 	$i=0; $offset=0;
 	for($x=0; $x<sizeof($PinyinNum); $x++) {
-		$Pinyin[$i] = mb_substr($PinyinStr,$offset,strlen($PinyinNum[$x])-1);
+		if(mb_substr($PinyinStr,$offset,1)=="'"){
+			$plusone=1;
+		} else {
+			$plusone=0;
+		}
+		$Pinyin[$i] = mb_substr($PinyinStr,$offset,strlen($PinyinNum[$x])-1+$plusone);
 		$offset=$offset+strlen($PinyinNum[$x])-1;
 		$i++;
 	}
