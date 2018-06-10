@@ -23,3 +23,11 @@ CREATE TABLE Review (
 PRIMARY KEY (  id )
 )CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `Review` ADD INDEX(`HSK`);
+
+CREATE TABLE RadicalHanzi (
+ id INT NOT NULL AUTO_INCREMENT,
+ RadicalID INT NOT NULL,
+ HanziID INT NOT NULL,
+PRIMARY KEY (  id )
+)CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE `RadicalHanzi` ADD INDEX(`RadicalID`);
