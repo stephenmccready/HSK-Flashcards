@@ -1,11 +1,14 @@
 <?php
 include_once 'db_connect.php';
+$fuzzyPinyin=false;
 if(preg_match("/\p{Han}+/u",  $_GET["search"])) {
 	$searchfield="HanziS";$utf8="";
 } else if(preg_match("/[āēīōūǖáéíóúǘǎěǐǒǔǚàèìòùǜ]/u",  $_GET["search"])) {
 	$searchfield="Pinyin";$utf8=" collate utf8_bin";
 } else if(preg_match("/[012345]/u",  $_GET["search"])) {
 	$searchfield="PinyinNum";$utf8="";
+} else if(preg_match("/[9]/u",  $_GET["search"])) {
+	$searchfield="PinyinNum";$utf8="";$fuzzyPinyin=true;$searchStr=str_replace("9","",$_GET["search"]);
 } else {
 	$searchfield="English";$utf8="";
 }
@@ -16,10 +19,12 @@ if($_GET["case"]=="false") {
 	$case1="";
 	$case2="";
 }
-if($_GET["exact"]=="true") {
-	$sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " = " . $case1 . "'" . $_GET["search"] . "'" . $case2 . $utf8;
+if($fuzzyPinyin){
+	$sql="SELECT DISTINCT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " REGEXP " . $case1 . "'" . $searchStr . "1|" . $searchStr . "2|" . $searchStr . "3|" . $searchStr . "4|" . $searchStr . "5" . "'" . $case2 . $utf8;
+} else if($_GET["exact"]=="true") {
+	$sql="SELECT DISTINCT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " = " . $case1 . "'" . $_GET["search"] . "'" . $case2 . $utf8;
 } else {
-	$sql="SELECT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " Like " . $case1 . "'%" . $_GET["search"] . "%'" . $case2 . $utf8;
+	$sql="SELECT DISTINCT HanziS,Pinyin,PinyinNum,English,PartofSpeech,H.HSK,Chapter,H.ID,R.ID As RevID FROM Hanzi As H LEFT OUTER JOIN Review AS R ON R.ID=H.ID Where " . $case1 . $searchfield . $case2 . " Like " . $case1 . "'%" . $_GET["search"] . "%'" . $case2 . $utf8;
 }
 $result=mysqli_query($mysqli,$sql);
 mysqli_fetch_all($result,MYSQLI_ASSOC);
@@ -35,7 +40,12 @@ foreach ($result as $row) {
 	$PinyinStr=str_replace(" ","",$row["Pinyin"]);
 	$i=0; $offset=0;
 	for($x=0; $x<sizeof($PinyinNum); $x++) {
-		$Pinyin[$i] = mb_substr($PinyinStr,$offset,strlen($PinyinNum[$x])-1);
+		if(mb_substr($PinyinStr,$offset,1)=="'"){
+			$plusone=1;
+		} else {
+			$plusone=0;
+		}
+		$Pinyin[$i] = mb_substr($PinyinStr,$offset,strlen($PinyinNum[$x])-1+$plusone);
 		$offset=$offset+strlen($PinyinNum[$x])-1;
 		$i++;
 	}
