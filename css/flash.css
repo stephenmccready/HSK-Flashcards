@@ -1,12 +1,12 @@
 *{margin:0;}
 html,body{height:100%;padding:0 !important;}
-html {overflow: -moz-scrollbars-vertical; overflow-y: scroll;}
-.header {width:100%;}
-.wrapper {width:100%;min-height:99%;height:auto !important;height:99%;margin:0 auto -80px;text-align:center;padding-top:6px;}
-.footer {width:100%;height:80px;text-align:center;z-index:999;position:relative;background-color:#FFF;}
+html{overflow: -moz-scrollbars-vertical; overflow-y: scroll;}
+.header{width:100%;}
+.wrapper{width:100%;min-height:99%;height:auto !important;height:99%;margin:0 auto -80px;text-align:center;padding-top:6px;}
+.footer{width:100%;height:80px;text-align:center;z-index:999;position:relative;background-color:#FFF;}
+.footer div{margin-top:0.4em;}
 #divHSK,#divLesson,#divSearch,#divSettings{display:none;margin-top: 0.5em;margin-bottom: 0.5em;}
-#divHSK label{margin:.25em;}
-#divLesson label{margin:.25em;}
+#divLesson label{margin-bottom:.25em;}
 #divOptions{margin-top: 0.5em;margin-bottom: 0.5em;}
 #Card{border-left:1px solid #000;border-right:3px solid #000;border-top:1px solid #000;border-bottom:3px solid #000;border-radius:11px;-webkit-border-radius:11px;overflow-y:auto;background-color:#F5F5F5;width:80%;margin-left:10%;margin-right:10%;overflow-x:hidden;}
 #animation {width:100%;text-align:center;margin:0 auto;display:inline-block;}
@@ -21,7 +21,6 @@ button.btn-audio{margin-left:0.5em;margin-right:0.5em;margin-top:0.5em;}
 #Pinyin{font-weight: bold;}
 #Views {text-align:center;font-size:1.05em;color:#6f93c3;width:100%;padding-top:0em;}
 #footCenter{color:#B0C4DE;font-size:1.25em;margin-left:0.5%;margin-right:0.5%;}
-.btn-huge {font-size:125% !important;margin:.2em !important;min-width:2.75em !important;padding:.2em !important;}
 .pyn {color:purple;}
 .pos {color:#B0C4DE;display:none;}
 p.chk {margin-top:0.05em;}
@@ -86,11 +85,13 @@ p.chk {margin-top:0.05em;}
 	0% { transform:rotate(0deg);}
 	100% { transform:rotate(360deg);}
 }
-td:nth-child(1) {width:7%;font-size:80%;padding:0px 0px 0px 2px !important;}
-td:nth-child(2) {width:28%;font-size:125%;padding:0px 0px 0px 0px !important;}
-td:nth-child(3) {width:25%;padding:0px 0px 0px 0px !important;}
-td:nth-child(4) {width:35%;padding:0px 0px 0px 0px !important;}
-td:nth-child(5) {width:5%;padding:0px 0px 0px 0px !important;}
+td:nth-child(1) {width:5%;font-size:80%;padding:0px 0px 0px 2px !important;}
+td:nth-child(2) {width:5%;font-size:125%;padding:0px 0px 0px 0px !important;}
+td:nth-child(3) {width:20%;font-size:125%;padding:0px 0px 0px 0px !important;}
+td:nth-child(4) {width:5%;padding:0px 0px 0px 0px !important;}
+td:nth-child(5) {width:25%;padding:0px 0px 0px 0px !important;}
+td:nth-child(6) {width:35%;padding:0px 0px 0px 0px !important;}
+td:nth-child(7) {width:5%;padding:0px 0px 0px 0px !important;text-align:left !important;}
 .tone1 {color: red;}
 .tone2 {color: green;}
 .tone3 {color: blue;}
@@ -117,3 +118,10 @@ svg {display:inline-block !important;margin:0 auto !important;text-align: center
 .checkboxLabel,.toggleBox{display:inline-block;}
 #holdLesson,#holdHSK{display:none;}
 div.disabled{color:#B0B0B0;}
+#btn-clearsearch{color:#B0B0B0 !important;}
+#searchbtnbox, #searchbox {display:inline-block;margin-bottom:0.75em;}
+#searchbox input{border:0 !important;}
+#searchbox button{border:0 !important;}
+#searchbox span{border:0 !important;}
+#searchbox {border:1px solid #ccc; background:#fff !important;}
+#searchbox input{font-size:14px; font-weight:bold;}
