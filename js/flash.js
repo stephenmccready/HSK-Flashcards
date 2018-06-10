@@ -1,5 +1,4 @@
-$("#divHSK :input").change(function(){HSKchosen(this.value);});
-$("#divHSK .btn").click(function(){HSKchosen($("input[name='radHSK']:checked").val());});
+$("#divHSK .btn").on('click touch', function () {var thisHSK=this.id.replace("labHSK", "");HSKchosen(thisHSK);});
 function HSKchosen(HSK) {
 	$('#holdHSK').text(HSK);
 	$('#dispHSK').text("HSK: "+HSK);
@@ -8,10 +7,17 @@ function HSKchosen(HSK) {
 	$('#Pinyin0, #Pinyin1, #Pinyin2, #Pinyin3, #Pinyin4').text('');
 	$('#English').text('');
 	$('#PartofSpeech').text('');
+	$('#dispLesson').text($("input[name='radLesson']:checked").val());	
+	setlabHSK(HSK);
 	LoadFlashCards();
 }
-$("#divLesson :input").change(function(){LessonChosen(this.value);});
-$("#divLesson .btn").click(function(){LessonChosen($("input[name='radLesson']:checked").val());});
+$("#divLesson .btn").on('click touch', function () {var thisLesson=this.id.replace("labLess", "");
+	if($.isNumeric(thisLesson)) {
+		LessonChosen(parseInt(thisLesson,10));
+	} else {
+		LessonChosen(thisLesson);
+	}
+});
 function LessonChosen(Lesson) {
 	$('#holdLesson').text(Lesson);
 	$('#dispLesson').text(Lesson);
@@ -20,6 +26,8 @@ function LessonChosen(Lesson) {
 	$('#Pinyin0,#Pinyin1,#Pinyin2,#Pinyin3,#Pinyin4').text('');
 	$('#English').text('');
 	$('#PartofSpeech').text('');
+	$('#dispHSK').text("HSK: "+$("input[name='radHSK']:checked").val());
+	setlabLesson(Lesson);
 	LoadFlashCards();
 }
 var writer0;var writer1;var writer2;var writer3;var writer4;
@@ -48,6 +56,7 @@ randomize.addEventListener('click', function(event) {
 });
 var review=document.querySelector('#review-glyph');
 review.addEventListener('click', function(event) {
+	var col=resultArray[ID].split("~");
 	if($('#review-glyph').hasClass("review-off")) {
 		$('#review-glyph').removeClass("review-off");
 		$('#review-glyph').addClass("review-on");
@@ -55,7 +64,6 @@ review.addEventListener('click', function(event) {
 	} else {
 		$('#review-glyph').removeClass("review-on");
 		$('#review-glyph').addClass("review-off");
-		var col=resultArray[ID].split("~");
 		removeFromReview(col[25]);
 	}
 });
@@ -93,15 +101,30 @@ function init() {
 	$('#dispHSK').text("HSK: "+HSKLevelCookie);
 	$("#holdLesson").text(HSKLessonCookie);
 	$('#dispLesson').text(HSKLessonCookie);
+	setlabHSK(HSKLevelCookie);
+	setlabLesson(HSKLessonCookie);
+	$("#divHSK,#divLesson").hide();
+	LoadFlashCards();
+}
+function setlabHSK(x) {
 	$("#labHSK1,#labHSK2,#labHSK3,#labHSK4,#labHSK5,#labHSK6,#labHSKAll").removeClass("active");
-	$('#labHSK'+HSKLevelCookie).addClass("active");
+	$('#labHSK'+x).addClass("active");
+	$("[name=radHSK]").val([x]);
+	$("#holdHSK").text(x);
+}
+function setlabLesson(x) {
 	$("#labLess01,#labLess02,#labLess03,#labLess04,#labLess05,#labLess06,#labLess07,#labLess08,#labLess09,#labLess10").removeClass("active");
 	$("#labLess11,#labLess12,#labLess13,#labLess14,#labLess15,#labLess16,#labLess17,#labLess18,#labLess19,#labLess20").removeClass("active");
 	$("#labLessAll,#labLessAdjectives,#labLessAdverbs,#labLessMeasureWords,#labLessNouns,#labLessNumbers").removeClass("active");
 	$("#labLessParticles,#labLessPronouns,#labLessProperNouns,#labLessRadicals,#labLessVerbs,#labLessReview").removeClass("active");
-	$('#labLess'+HSKLessonCookie.replace(" ","")).addClass("active");
-	$("#divHSK,#divLesson").hide();
-	LoadFlashCards();
+	$('#labLess'+x).addClass("active");
+	if($.isNumeric(x)){
+		$("[name=radLesson]").val(parseInt(x,10));
+		$("#holdLesson").text(parseInt(x,10));
+	} else {
+		$("[name=radLesson]").val([x]);
+		$("#holdLesson").text(x);
+	}
 }
 $('#myform1 :checkbox').change(function() {
 	if(this.id=="toggleENGLISH") {
@@ -141,7 +164,64 @@ $('#myform2 :checkbox').change(function() {
 		}
 	}
 });
-
+$('#toggleCARDLIST').click(function() {
+	dispCard('current');
+	populateTable();
+	$('#Card,#fCard,#pCard,#List,#listButton,#cardButton').toggle();
+	if($('#togglePINYIN').prop("checked") == true) {$('#Pinyin,.colPinyin').show();} else {$('#Pinyin,.colPinyin').hide();}
+	if($('#toggleENGLISH').prop("checked") == true) {$('#English,.colEnglish').show();} else {$('#English,.colEnglish').hide();}
+	if($('#toggleENGLISH').prop("checked") == true) {$('#PartofSpeech,.colPOS').show();} else {$('#PartofSpeech,.colPOS').hide();}
+});
+$('#selQuizMisses').change(function() {
+	if(this.id=="selQuizMisses") {
+		writer0.quiz(options={showHintAfterMisses:$('select[id=selQuizMisses]').val()});
+		var row=resultArray[ID];
+		var col=row.split("~");
+		if(col[2]!=""){writer1.quiz(options={showHintAfterMisses:$('select[id=selQuizMisses]').val()});}
+		if(col[3]!=""){writer2.quiz(options={showHintAfterMisses:$('select[id=selQuizMisses]').val()});}
+		if(col[4]!=""){writer3.quiz(options={showHintAfterMisses:$('select[id=selQuizMisses]').val()});}
+		if(col[5]!=""){writer4.quiz(options={showHintAfterMisses:$('select[id=selQuizMisses]').val()});}
+	}
+});
+$('#btn-search').click(function() {
+	search();
+});
+$('#btn-clearsearch').click(function() {
+	$("#txtsearch").val("");
+});
+$('#btn-rad').click(function() {
+	$('.loader').show();
+	var row=resultArray[ID];
+	var col=row.split("~");
+	var request=new XMLHttpRequest();
+	request.onreadystatechange=function() {
+		if (request.readyState===4) {
+			if (request.status===200) {
+				if(request.responseText==="") {
+					$('.loader').hide();
+					$('#btn-rad').html("No cards for <span lang='zh'>"+col[1]+"</span> exist yet.");
+					$("#btn-rad").prop("disabled",true);
+				} else {
+					$("#btn-rad").prop("disabled",false);
+					var result=request.responseText;
+					var resultLen=result.length;
+					resultLen=resultLen-1;
+					result=result.substr(0, resultLen);
+					resultArray=result.split("|");
+					ID=0;
+					holdID=999999;
+					$('.loader').hide();
+					populateTable();
+					dispCard('first');
+				}
+			}
+		}
+	};
+	var url='includes/searchRadical.php?RadicalID='+col[25];
+	request.open('GET', url, true);
+	request.send();
+	row=null;
+});
 function quizControl() {
 	var row=resultArray[ID];
 	var col=row.split("~");
@@ -195,6 +275,7 @@ var resultArray;
 var ID;
 var holdID;
 function LoadFlashCards() {
+	writer0=writer1=writer2=writer3=writer4=null;
 	$('#Pinyin0,#Pinyin1,#Pinyin2,#Pinyin3,#Pinyin4,#PartofSpeech,#Pinyin,#Views').text('');
 	$("#div-ani0,#div-ani1,#div-ani2,#div-ani3,#div-ani4").hide();
 	$('#Audio, #English').html('');
@@ -212,7 +293,7 @@ function LoadFlashCards() {
 						$('#holdLesson').text() + "</b> available yet.");
 					$("#footCenter,#pinyin").html("");
 					$('#HanziAni0,#HanziAni1,#HanziAni2,#HanziAni3,#HanziAni4,#English').show();
-					$('#div-ani0,#div-ani1,#div-ani2,#div-ani3,#div-ani4,.loader,#Views,#Audio').hide();
+					$('#div-ani0,#div-ani1,#div-ani2,#div-ani3,#div-ani4,.loader,#Views,#Audio,#divRadicalBtn').hide();
 					resultArray=[];
 					$("#listTab tr").remove();
 				} else {
@@ -245,20 +326,20 @@ function dispCard(action) {
 		if(hsk==="All"){
 			if( (hsk<3 && l<15) || (hsk>2 && l<20) ){
 				l++;
-				$("#holdLesson").text(l);
-				$('#dispLesson').text(l);
+				$("#holdLesson").text(parseInt(l,10));
+				$('#dispLesson').text(parseInt(l,10));
 				$('input:radio[name=radLesson][value="'+l+'"]').click("quiet");
 			} else {
 				$("#holdLesson").text("Review");
 				$("#dispLesson").text("Review");
 				$('input:radio[name=radLesson][value="Review"]').click("quiet");
 			}		
-		} else {	
+		} else {
 			if($.isNumeric(l)){
 				if( (hsk<3 && l<15) || (hsk>2 && l<20) ){
 					l++;
-					$("#holdLesson").text(l);
-					$('#dispLesson').text(l);
+					$("#holdLesson").text(parseInt(l,10));
+					$('#dispLesson').text(parseInt(l,10));
 					$('input:radio[name=radLesson][value="'+l+'"]').click("quiet");
 				} else if( hsk==6 && l==20 ) {
 					$("#holdHSK").text("All");
@@ -270,9 +351,9 @@ function dispCard(action) {
 					hsk++;
 					l=1;
 					$("#holdHSK").text(hsk);
-					$('#dispHSK').text("HSK: "+l);
-					$("#holdLesson").text(l);
-					$('#dispLesson').text(l);
+					$('#dispHSK').text("HSK: "+parseInt(hsk,10));
+					$("#holdLesson").text(parseInt(l,10));
+					$('#dispLesson').text(parseInt(l,10));
 					$('input:radio[name=radLesson][value="'+l+'"]').click("quiet");
 				}
 			} else {
@@ -283,6 +364,7 @@ function dispCard(action) {
 		}
 		LoadFlashCards();
 	} else {
+		$("#Views").show();
 		if(arrLen!=1) {
 			if(action=="prev"){
 				if(ID!=0){
@@ -296,13 +378,13 @@ function dispCard(action) {
 				ID=arrLen-1;
 			} else if(action=="first") {
 				ID=0;
+			} else if(action=="current"){
+				/* Do nothing */
 			} else if($('#random-glyph').hasClass("random-on")) {
 				ID=Math.floor(Math.random() * arrLen);
 				if (arrLen!==0 && ID===lastID) {
 					if(ID===0) {ID++;} else {ID--;}
 				}
-			} else if(action=="current"){
-				/* Do nothing */
 			} else {
 				ID++;
 				if(ID >= arrLen) {
@@ -312,16 +394,16 @@ function dispCard(action) {
 		}
 	if(holdID!==ID) {
 		holdID=ID;
-		$("#HanziAni0").html('loading...');
+		var row=resultArray[ID];
+		var col=row.split("~");
+		lastID=ID;
+		$("#HanziAni0").html('');
 		$('#Audio').html('');
 		$('#OnRevList').text("");
-		var row=resultArray[ID];
-		lastID=ID;
-		var col=row.split("~");
-		if(col[2]!="") {$("#HanziAni1").html('loading...');}
-		if(col[3]!="") {$("#HanziAni2").html('loading...');}
-		if(col[4]!="") {$("#HanziAni3").html('loading...');}
-		if(col[5]!="") {$("#HanziAni4").html('loading...');}
+		if(col[2]!="") {$("#HanziAni1").html('');}
+		if(col[3]!="") {$("#HanziAni2").html('');}
+		if(col[4]!="") {$("#HanziAni3").html('');}
+		if(col[5]!="") {$("#HanziAni4").html('');}
 		var wSize=Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		var w=148;var h=148;
 		$('#HanziAni0,#HanziAni1,#HanziAni2,#HanziAni3,#HanziAni4').css('height','148px');
@@ -369,6 +451,29 @@ function dispCard(action) {
 			case "3": strokeCol5="#0000FF"; break;
 			case "4": strokeCol5="#800080"; break;
 		}
+/*
+		if(col[5]!=="") {
+			$("#ani-container").css({"fontSize": "7em","height":"1.25em"});
+		} else if(col[4]!=="") {
+			$("#ani-container").css({"fontSize": "9em","height":"1.25em"});
+		} else if(col[3]!=="") {
+			$("#ani-container").css({"fontSize": "11em","height":"1.25em"});
+		} else if(col[2]!=="") {
+			$("#ani-container").css({"fontSize": "13em","height":"1.25em"});
+		} else {
+			$("#ani-container").css({"fontSize": "13em","height":"1.25em"});
+		}
+		$("#HanziAni0").text(col[1]);
+		$("#HanziAni0").css({"color": strokeCol1});
+		$("#HanziAni1").text(col[2]);
+		$("#HanziAni1").css({"color": strokeCol2});
+		$("#HanziAni2").text(col[3]);
+		$("#HanziAni2").css({"color": strokeCol3});
+		$("#HanziAni3").text(col[4]);
+		$("#HanziAni3").css({"color": strokeCol4});
+		$("#HanziAni4").text(col[5]);
+		$("#HanziAni4").css({"color": strokeCol5});
+*/
 		var showChar="true";
 		if($('#toggleSTROKEQUIZ').prop("checked") === true) {
 			showChar="false";
@@ -379,29 +484,35 @@ function dispCard(action) {
 		}
 		$('#HanziAni0,#HanziAni1,#HanziAni2,#HanziAni3,#HanziAni4').css('border','0');
 		$("#HanziAni0").html('');
+		$("#HanziAni0").css('color', strokeCol1);
 		$("#btn-ani0").show();
-		writer0=new HanziWriter(
-			'HanziAni0', col[1], 
-				{width:w,height:h,padding:0,delayBetweenStrokes:50,
-					strokeColor:strokeCol1,showCharacter:showChar,showOutline:showOut,
-					onLoadCharDataError: function(reason) {
-						$("#HanziAni0").html('<div class="hanzi">'+col[1]+'</div><div class="disabled">No stroke order</div>');
-						$("#HanziAni0").css('color', strokeCol1);
-						$("#btn-ani0").hide();}});
+		writer0=new HanziWriter('HanziAni0', col[1],
+			{width:w,height:h,padding:0,delayBetweenStrokes:50,showHintAfterMisses:$('select[id=selQuizMisses]').val(),
+				strokeColor:strokeCol1,showCharacter:showChar,showOutline:showOut
+				,onLoadCharDataSuccess: function(data) {
+				}
+				,onLoadCharDataError: function(reason) {
+					$("#HanziAni0").html('<div class="hanzi">'+col[1]+'</div><div class="disabled">No stroke order</div>');
+					$("#HanziAni0").css('color', strokeCol1);
+					$("#btn-ani0").hide();
+				}
+			}
+		);
 		if($('#toggleSTROKEQUIZ').prop("checked") === true) {
 			writer0.hideCharacter();
 			$('#HanziAni0').css('border','1px solid silver');
 			writer0.quiz();
-		}
-		$("#btn-ani0").css("color", strokeCol1);
+		}		
 		var y=1;
 		if(col[2]!="") {
 			$("#btn-ani1").show();
 			$("#HanziAni1").html('');
-			writer1=new HanziWriter('HanziAni1', col[2], {width:w,height:h,padding:0,delayBetweenStrokes:50,
-				strokeColor:strokeCol2,showCharacter:showChar,showOutline:showOut
-				//Add onLoadCharDataError: function(reason) {
-				});
+			writer1=new HanziWriter('HanziAni1', col[2], {width:w,height:h,padding:0,delayBetweenStrokes:50,showHintAfterMisses:$('select[id=selQuizMisses]').val(),
+				strokeColor:strokeCol2,showCharacter:showChar,showOutline:showOut,
+					onLoadCharDataError: function(reason) {
+						$("#HanziAni1").html('<div class="hanzi">'+col[2]+'</div><div class="disabled">No stroke order</div>');
+						$("#HanziAni1").css('color', strokeCol1);
+						$("#btn-ani1").hide();}});
 			$("#btn-ani1").css("color", strokeCol2);
 			y++;
 			if($('#toggleSTROKEQUIZ').prop("checked") === true) {
@@ -412,10 +523,12 @@ function dispCard(action) {
 		} 
 		if(col[3]!="") {
 			$("#HanziAni2").html('');
-			writer2=new HanziWriter('HanziAni2', col[3], {width:w,height:h,padding:0,delayBetweenStrokes:50,
-				strokeColor:strokeCol3,showCharacter:showChar,showOutline:showOut
-				//Add onLoadCharDataError: function(reason) {
-				});
+			writer2=new HanziWriter('HanziAni2', col[3], {width:w,height:h,padding:0,delayBetweenStrokes:50,showHintAfterMisses:$('select[id=selQuizMisses]').val(),
+				strokeColor:strokeCol3,showCharacter:showChar,showOutline:showOut,
+					onLoadCharDataError: function(reason) {
+						$("#HanziAni2").html('<div class="hanzi">'+col[3]+'</div><div class="disabled">No stroke order</div>');
+						$("#HanziAni2").css('color', strokeCol1);
+						$("#btn-ani2").hide();}});
 			$("#btn-ani2").css("color", strokeCol3);
 			y++;
 			if($('#toggleSTROKEQUIZ').prop("checked") === true) {
@@ -426,10 +539,12 @@ function dispCard(action) {
 		} 
 		if(col[4]!="") {
 			$("#HanziAni3").html('');
-			writer3=new HanziWriter('HanziAni3', col[4], {width:w,height:h,padding:0,delayBetweenStrokes:50,
-				strokeColor:strokeCol4,showCharacter:showChar,showOutline:showOut
-				//Add onLoadCharDataError: function(reason) {
-				});
+			writer3=new HanziWriter('HanziAni3', col[4], {width:w,height:h,padding:0,delayBetweenStrokes:50,showHintAfterMisses:$('select[id=selQuizMisses]').val(),
+				strokeColor:strokeCol4,showCharacter:showChar,showOutline:showOut,
+					onLoadCharDataError: function(reason) {
+						$("#HanziAni3").html('<div class="hanzi">'+col[4]+'</div><div class="disabled">No stroke order</div>');
+						$("#HanziAni3").css('color', strokeCol1);
+						$("#btn-ani3").hide();}});
 			$("#btn-ani3").css("color", strokeCol4);
 			y++;
 			if($('#toggleSTROKEQUIZ').prop("checked") === true) {
@@ -440,10 +555,12 @@ function dispCard(action) {
 		} 
 		if(col[5]!="") {
 			$("#HanziAni4").html('');
-			writer4=new HanziWriter('HanziAni4', col[5], {width:w,height:h,padding:0,delayBetweenStrokes:50,
-				strokeColor:strokeCol5,showCharacter:showChar,showOutline:showOut
-				//Add onLoadCharDataError: function(reason) {
-				});
+			writer4=new HanziWriter('HanziAni4', col[5], {width:w,height:h,padding:0,delayBetweenStrokes:50,showHintAfterMisses:$('select[id=selQuizMisses]').val(),
+				strokeColor:strokeCol5,showCharacter:showChar,showOutline:showOut,
+					onLoadCharDataError: function(reason) {
+						$("#HanziAni4").html('<div class="hanzi">'+col[5]+'</div><div class="disabled">No stroke order</div>');
+						$("#HanziAni4").css('color', strokeCol1);
+						$("#btn-ani4").hide();}});
 			$("#btn-ani4").css("color", strokeCol5);
 			y++;
 			if($('#toggleSTROKEQUIZ').prop("checked") === true) {
@@ -519,6 +636,13 @@ function dispCard(action) {
     		+'<span class="tone'+col[10]+'">'+col[15]+'</span>');
 		$('#English').text(col[21]);
 		$('#PartofSpeech').text(col[22]);
+		if(col[22]==="radical") {
+			$("#btn-rad").html('<span class="glyphicon glyphicon-list"> Characters containing</span> <span lang="zh">'+col[1]+'</span>');
+			$("#divRadicalBtn").show();
+			$("#btn-rad").prop("disabled",false);
+		} else {
+			$("#divRadicalBtn").hide();
+		}
 		$('#HSK').text(col[23]);
 		$('#DBID').text(col[25]);
 		col[27]++;
@@ -586,33 +710,51 @@ function populateTable(){
 			if(col[14].substr(0,1)===col[14].substr(0,1).toUpperCase()) {PNspace3=" ";}
 			if(col[15].substr(0,1)===col[15].substr(0,1).toUpperCase()) {PNspace4=" ";}
 		}
-		var td5="";
-		if(col[26]!=='')	{
-			td5='<td onclick="ID='+i+';removeFromReview('+col[25]+');$(\'#tabRevGlyph'+i+'\').removeClass(\'review-on\');$(\'#tabRevGlyph'+i+'\').addClass(\'review-off\');"><span id="tabRevGlyph'+i+'" class="glyphicon glyphicon-pushpin review-on"></span></td>';
+		var tdReview="";
+		if(col[26]!=='') {
+			tdReview='<td class="tdReview" id="td'+col[25]+'td'+i+'td'+col[23]+'"><span id="tabRevGlyph'+i+'" class="glyphicon glyphicon-pushpin review-on"></span></td>';
 		} else {
-			td5='<td onclick="$(\'#DBID\').text('+col[25]+');$(\'#HSK\').text('+col[23]+');addToReview();$(\'#tabRevGlyph'+i+'\').removeClass(\'review-off\');$(\'#tabRevGlyph'+i+'\').addClass(\'review-on\');"><span id="tabRevGlyph'+i+'" class="glyphicon glyphicon-pushpin review-off"></span></td>';
+			tdReview='<td class="tdReview" id="td'+col[25]+'td'+i+'td'+col[23]+'"><span id="tabRevGlyph'+i+'" class="glyphicon glyphicon-pushpin review-off"></span></td>';
 		}
-
     	$('#listTab').append('<tr id="tr'+col[25]+'"><td>'+col[23]+'.'+col[24]+'</td>'
-    		+'<td><span class="tone'+col[6]+'">'+col[1]+'</span>'
-    		+'<span class="tone'+col[7]+'">'+col[2]+'</span>'
-    		+'<span class="tone'+col[8]+'">'+col[3]+'</span>'
-    		+'<span class="tone'+col[9]+'">'+col[4]+'</span>'
-    		+'<span class="tone'+col[10]+'">'+col[5]
-    			+'<button class="btn btn-default btn-xs btn-audio" onclick="playBAudio(\''
+    		+'<td><button class="btn btn-default btn-xs btn-audio" onclick="ID='+i+';dispCard(\'current\');populateTable();$(\'#Card, #fCard, #pCard, #List\').toggle(); $(\'#listButton\').toggle(); $(\'#cardButton\').toggle();"><span class="glyphicon glyphicon-file"></span></button></td>'
+    		+'<td><span class="tone'+col[6]+'" lang="zh">'+col[1]+'</span>'
+    		+'<span class="tone'+col[7]+' lang="zh"">'+col[2]+'</span>'
+    		+'<span class="tone'+col[8]+' lang="zh"">'+col[3]+'</span>'
+    		+'<span class="tone'+col[9]+' lang="zh"">'+col[4]+'</span>'
+    		+'<span class="tone'+col[10]+' lang="zh"">'+col[5]+'</span></td>'
+    		+'<td><button class="btn btn-default btn-xs btn-audio" onclick="playBAudio(\''
     			+AudioHanzi1.toLowerCase()+'\',\''+AudioHanzi2.toLowerCase()+'\','+hanziSize
-    			+')"><span class="glyphicon glyphicon-volume-up"></span></button></span></td>'
+    			+')"><span class="glyphicon glyphicon-volume-up"></span></button></td>'
     		+'<td><span class="colPinyin tone'+col[6]+'">'+col[11]+'</span>'+PNspace1
     		+'<span class="colPinyin tone'+col[7]+'">'+col[12]+'</span>'+PNspace2
     		+'<span class="colPinyin tone'+col[8]+'">'+col[13]+'</span>'+PNspace3
     		+'<span class="colPinyin tone'+col[9]+'">'+col[14]+'</span>'+PNspace4
     		+'<span class="colPinyin tone'+col[10]+'">'+col[15]+'</span></td>'
     		+'<td><span class="colEnglish">'+col[21]+'</span>&nbsp;<span class="colPOS">'+col[22]+'</span></td>'
-    		+td5+'</tr>');
+    		+tdReview+'</tr>');
 	}
 	$("#wordcount").html(resultArray.length);
 	$("#wordcountsuffix").html(" words");
 }
+$("#listTab").on("click","td",function() {
+	var tdArray=this.id.split("td");
+	if(this.id !== '') {
+		ID=tdArray[2];
+		var col=resultArray[ID].split("~");
+		if($("#tabRevGlyph"+tdArray[2]).hasClass("review-off")) {
+			$('#DBID').text(tdArray[1]);
+			$('#HSK').text(tdArray[3]);
+			addToReview();
+			$("#review-glyph,#tabRevGlyph"+tdArray[2]).removeClass("review-off");
+			$("#review-glyph,#tabRevGlyph"+tdArray[2]).addClass("review-on");
+		} else {
+			removeFromReview(tdArray[1]);
+			$("#review-glyph,#tabRevGlyph"+tdArray[2]).removeClass("review-on");
+			$("#review-glyph,#tabRevGlyph"+tdArray[2]).addClass("review-off");
+		}
+	}
+});
 function knowIt() {
 	var col=resultArray[ID].split("~");
 	resultArray.splice(ID, 1);
@@ -652,12 +794,11 @@ function addToReview() {
 	request.onreadystatechange=function() {
 		if (request.readyState===4) {
 			if (request.status===200) {
-				$('#Views').append(request.responseText);
 				var col=resultArray[ID].split("~");
 				resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
 						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~'+col[14]+'~'+
 						col[15]+'~'+col[16]+'~'+col[17]+'~'+col[18]+'~'+col[19]+'~'+col[20]+'~'+col[21]+'~'+col[22]+'~'+col[23]+'~'+
-						col[24]+'~'+col[25]+'~'+col[26]+'~'+col[27]+'~';
+						col[24]+'~'+col[25]+'~'+col[25]+'~'+col[27]+'~';
 			}
 		}
 	};
@@ -674,11 +815,7 @@ function removeFromReview(idToDel) {
 				resultArray[ID]=col[0]+'~'+col[1]+'~'+col[2]+'~'+col[3]+'~'+col[4]+'~'+col[5]+'~'+
 						col[6]+'~'+col[7]+'~'+col[8]+'~'+col[9]+'~'+col[10]+'~'+col[11]+'~'+col[12]+'~'+col[13]+'~'+col[14]+'~'+
 						col[15]+'~'+col[16]+'~'+col[17]+'~'+col[18]+'~'+col[19]+'~'+col[20]+'~'+col[21]+'~'+col[22]+'~'+col[23]+'~'+
-						col[24]+'~'+col[25]+'~'+col[26]+'~'+col[27]+'~';
-    			$("#copied").text(col[1]+col[2]+col[3]+col[4]+col[5]+" removed from review");
-    			$("#copied").show().delay(50).fadeOut(2000);
-    			resultArray.splice(ID, 1);
-				dispCard("next");
+						col[24]+'~'+col[25]+'~'+''+'~'+col[27]+'~';
 			}
 		}
 	};
@@ -722,6 +859,8 @@ function search() {
 					ID=0;
 					holdID=999999;
 					$('.loader').hide();
+//					$('#dispHSK').text("Search");
+//					$('#dispLesson').text($('#txtsearch').val());
 					populateTable();
 					dispCard('first');
 				}
