@@ -1,7 +1,18 @@
 # HSK-Flashcards
-HSK (Hànyǔ Shuǐpíng Kǎoshì 汉语水平考试) flashcard app for learning Chinese (Mandarin).
+HSK (Hànyǔ Shuǐpíng Kǎoshì 汉语水平考试) flashcard app to help you memorize Chinese (Mandarin) characters.
 
-Based on HSK levels. Includes Hanzi stroke order, audio, pinyin, pinyin color coding, radicals and English translation.
+Based on HSK levels. Includes: 
+- Hanzi stroke order
+- HSK level and chapter
+- Audio
+- Pinyin
+- Pinyin color coding
+- Radicals
+- English translation
+- English part of speech
+- Search
+- Word list
+- Custom review list
 
 Demo <a href="https://stephenmccready.asia/mi/flash.php">here: https://stephenmccready.asia/mi/flash.php</a>
 
