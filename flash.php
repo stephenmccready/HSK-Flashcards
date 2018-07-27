@@ -14,24 +14,41 @@ include_once 'includes/db_connect.php';
 	<script src="https://stephenmccready.asia/html5shiv.min.js"></script>
 	<![endif]-->
 </head>
-<body onload="init()">
+<body onload="init()" scroll="no">
+<div id="overlayHelp" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeHelp()">&times;</a>
+  <div class="overlay-content">
+  	<h4>Help</h4>
+  	<p><h5>Search</h5>
+    You can search by 汉字 (Hanzi), English word(s), Pīnyīn or Pinyin+number<br/>
+    e.g. <b>下, xià, xia4, fall</b><br/>
+    <span class="glyphicon glyphicon-exclamation-sign"></span> To wildcard search pinyin number, use Pinyin+'<b>9</b>' e.g. <b>xia9</b>. This will return all words that contain the pinyin xia1, xia2, xia3, xia4 and xia5</p>
+    <p><h5>Radicals</h5>
+    If you click or tap <span class="glyphicon glyphicon-list"></span> beside a radical, all the characters containing that radical will be listed</p>
+    <p><h5>Miscellaneous</h5>
+    <span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;Displays the cards in random order<br/>
+    <span class="glyphicon glyphicon-copy"></span>&nbsp;&nbsp;Copy the Hanzi to the clipboard<br/>
+    <span class="glyphicon glyphicon-pushpin"></span>&nbsp;&nbsp;Add/remove the card from your review list<br/>
+    </p>
+  </div>
+</div>
 <div class="wrapper">
 <header>
 	<div class="btn-group" id="navbar">
-		<button id="dispHSK" type="button" class="btn btn-primary" onclick="$('#divHSK').slideToggle();"></button>
-			<input type="text" id="holdHSK">
-		<button id="dispLesson" type="button" class="btn btn-primary" onclick="$('#divLesson').slideToggle();"></button>
-			<input type="text" id="holdLesson">
-		<button id="" type="button" class="btn btn-primary" onclick="LoadFlashCards();">
+		<button id="dispHSK" type="button" class="btn btn-primary" onclick="$('#divLesson,#divSearch,#divSettings').slideUp();$('#divHSK').slideToggle();"></button>
+		<button id="dispLesson" type="button" class="btn btn-primary" onclick="$('#divHSK,#divSearch,#divSettings').slideUp();$('#divLesson').slideToggle();"></button>
+		<button type="button" class="btn btn-primary" onclick="$('#divHSK,#divLesson,#divSearch,#divSettings').slideUp();LoadFlashCards();">
 			<span id="refreshButton" class="glyphicon glyphicon-refresh"></span></button>
-		<button type="button" class="btn btn-primary" onclick="$('#divSearch').slideToggle();">
+		<button type="button" class="btn btn-primary" onclick="$('#divHSK,#divLesson,#divSettings').slideUp();$('#divSearch').slideToggle();$('#txtsearch').focus();">
 			<span class="glyphicon glyphicon-search"></span></button>
-		<button type="button" class="btn btn-primary" onclick="$('#divSettings').slideToggle();">
+		<button type="button" class="btn btn-primary" onclick="$('#divHSK,#divLesson,#divSearch').slideUp();$('#divSettings').slideToggle();">
 			<span class="glyphicon glyphicon-cog"></span></button>
 		<button id="toggleCARDLIST" type="button" class="btn btn-primary">
 			<span id="listButton" class="glyphicon glyphicon-list"></span>
 			<span id="cardButton" class="glyphicon glyphicon-file"></span></button>
 	</div>
+	<input type="text" id="holdHSK">
+	<input type="text" id="holdLesson">
 </header>
 <div id="divHSK" class="clearfix well well-sm">
 	<h4>HSK Level</h4>
@@ -44,7 +61,10 @@ include_once 'includes/db_connect.php';
 	<label id="labHSK6" class="btn btn-gender btn-default"><input type="radio" name="radHSK" value="6">6</label>
 	<label id="labHSKAll" class="btn btn-gender btn-default"><input type="radio" name="radHSK" value="All">All</label>
 	</div>
-	<div class="clearfix divclose"><button class="btn btn-default closeButton" onclick="$('#divHSK').slideUp();"><span class="glyphicon glyphicon-chevron-up"></span></button></div>
+	<div class="clearfix divclose">
+		<button class="btn btn-default closeButton" onclick="$('#divHSK').slideUp();">
+			<span class="glyphicon glyphicon-chevron-up"></span></button>
+	</div>
 </div>
 <div id="divLesson" class="clearfix well well-sm">
 	<h4>Lesson</h4>
@@ -70,25 +90,41 @@ include_once 'includes/db_connect.php';
 	<label id="labLess19" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="19"> 19</label>
 	<label id="labLess20" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="20"> 20</label>
 	<label id="labLessAll" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="All"> All</label>
-	<label id="labLessAdjectives" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Adjectives"> Adjectives</label>
-	<label id="labLessAdverbs" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Adverbs"> Adverbs</label>
-	<label id="labLessMeasureWords" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Measure Words"> Measure Words</label>
-	<label id="labLessNouns" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Nouns"> Nouns</label>
-	<label id="labLessNumbers" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Numbers"> Numbers</label>
-	<label id="labLessParticles" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Particles"> Particles</label>
-	<label id="labLessPronouns" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Pronouns"> Pronouns</label>
-	<label id="labLessProperNouns" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Proper Nouns"> Proper Nouns</label>
-	<label id="labLessRadicals" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Radicals"> Radicals</label>
-	<label id="labLessVerbs" class="btn btn-gender btn-default"><input type="radio" name="radLesson" value="Verbs"> Verbs</label>
-	<label id="labLessReview" class="btn btn-gender btn-warning"><input type="radio" name="radLesson" value="Review"> <span class="glyphicon glyphicon-pushpin"></span> Review</label>
+	<label id="labLessAdjectives" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Adjectives"> Adjectives</label>
+	<label id="labLessAdverbs" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Adverbs"> Adverbs</label>
+	<label id="labLessMeasureWords" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Measure Words"> Measure Words</label>
+	<label id="labLessModals" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Modals"> Modals</label>
+	<label id="labLessNouns" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Nouns"> Nouns</label>
+	<label id="labLessNumbers" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Numbers"> Numbers</label>
+	<label id="labLessParticles" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Particles"> Particles</label>
+	<label id="labLessPronouns" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Pronouns"> Pronouns</label>
+	<label id="labLessProperNouns" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Proper Nouns"> Proper Nouns</label>
+	<label id="labLessRadicals" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Radicals"> Radicals</label>
+	<label id="labLessVerbs" class="btn btn-gender btn-default">
+		<input type="radio" name="radLesson" value="Verbs"> Verbs</label>
+	<label id="labLessReview" class="btn btn-gender btn-warning">
+		<input type="radio" name="radLesson" value="Review">
+		<span class="glyphicon glyphicon-pushpin"></span> Review</label>
 	</div>
-	<div class="clearfix divclose"><button class="btn btn-default closeButton" onclick="$('#divLesson').slideUp();"><span class="glyphicon glyphicon-chevron-up"></span></button></div>
+	<div class="clearfix divclose">
+		<button class="btn btn-default closeButton" onclick="$('#divLesson').slideUp();">
+		<span class="glyphicon glyphicon-chevron-up"></span></button></div>
 </div>
 <div class="clearfix well well-sm" id="divSearch">
-	<h4>Search</h4>
+	<h4>Search in 汉字, Pinyin or English</h4>
 	<div>
 		<div id="searchbox">
-			<input type="search" id="txtsearch" name="txtsearch" aria-label="Search" placeholder="Search..."/>
+			<input type="search" id="txtsearch" name="txtsearch" aria-label="Search" placeholder="e.g. 天，tian1 or sky"/>
 			<button id="btn-clearsearch" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span></button>
 		</div>
 		<div id="searchbtnbox">
@@ -141,16 +177,16 @@ include_once 'includes/db_connect.php';
 		data-size="small" data-onstyle="default" data-offstyle="default"> 
 </form>
 </div>
+<div id="copied-container"><div id="copied"></div></div>
 <div class="main clearfix">
     <div class="loader">Loading</div>
 		<div id="List" class="clearfix">
 			<table id="listTab" class="table table-responsive table-condensed table-hover table-striped table-borderless"><tbody></tbody></table>
 			<span id="wordcount" class="posTab"></span><span id="wordcountsuffix" class="posTab"></span><br/><br/>
 		</div>
-    	<div id="Card">
+    	<div id="Card" class="flex-container">
 			<div id="animation" class="clearfix">
 				<div id="random-container"><span id="random-glyph" class="glyphicon glyphicon-random random-off"></span><span id="copy-glyph" class="glyphicon glyphicon-copy"></span><span id="review-glyph" class="glyphicon glyphicon-pushpin review-off"></span></div>
-				<div id="copied-container"><div id="copied"></div></div>
 				<div id="ani-container" class="clearfix"><div id="HanziAni0" class="ani" lang="zh"></div><div id="HanziAni1" class="ani" lang="zh"></div><div id="HanziAni2" class="ani" lang="zh"></div><div id="HanziAni3" class="ani" lang="zh"></div><div id="HanziAni4" class="ani" lang="zh"></div></div>
 			</div>
 			<div id="animation-buttons" class="clearfix">
@@ -163,34 +199,53 @@ include_once 'includes/db_connect.php';
 			<div class="clearfix" id="Audio"></div>
 			<div id="audio_player_container"></div>
 			<div class="clearfix" id="Views"></div>
-			<div class="clearfix" id="Pinyin">
-			<span id="Pinyin0"></span><span id="Pinyin1"></span><span id="Pinyin2"></span><span id="Pinyin3"></span><span id="Pinyin4"></span>
+			<div id="Pinyin-container" class="clearfix">
+				<div id="Pinyin">
+					<span id="Pinyin0"></span><span id="Pinyin1"></span><span id="Pinyin2"></span><span id="Pinyin3"></span><span id="Pinyin4"></span>
+				</div>
 			</div>
-			<div class="clearfix" id="English"></div>
-			<div class="clearfix pos" id="PartofSpeech"></div>
-			<div class="clearfix" id="divRadicalBtn"><button id="btn-rad" class="btn btn-default"></button></div>
+			<div id="PartofSpeech-container" class="clearfix">
+				<div id="divRadicalBtn"><button id="btn-rad" class="btn btn-default"></button></div>
+				<div class="pos" id="PartofSpeech"></div>
+			</div>
+			<div id="English-container" class="clearfix">
+				<div id="English"></div>
+			</div>
 			<input type="text" hidden id="DBID"/>
 			<input type="text" hidden id="HSK"/>
+			<div class="clearfix fgroup">
+			<div id="footCardNav">
+				<div class="btn-group">
+					<button type="button" class="btn btn-primary" onclick="dispCard('first');">
+						<span class="glyphicon glyphicon-fast-backward"></span></button>
+					<button type="button" class="btn btn-primary" onclick="dispCard('prev');">
+						<span class="glyphicon glyphicon-backward"></span></button>
+					<button type="button" class="btn btn-primary" onclick="">
+						<span id="footCenter"></span></button>
+					<button type="button" class="btn btn-primary" onclick="dispCard('next');">
+						<span class="glyphicon glyphicon-forward"></span></button>
+					<button type="button" class="btn btn-primary" onclick="dispCard('last');">
+						<span class="glyphicon glyphicon-fast-forward"></span></button>
+				</div>
+			</div>
+			</div>
 		</div>
 	</div>
 </div>
 <div class="clearfix footer" id="fCard">
-	<div class="clearfix">
-	<button type="button" class="btn btn-primary" onclick="dispCard('first');"><span class="glyphicon glyphicon-fast-backward"></span></button>
-	<button type="button" class="btn btn-primary" onclick="dispCard('prev');"><span class="glyphicon glyphicon-backward"></span></button>
-	<span id="footCenter"></span>
-	<button type="button" class="btn btn-primary" onclick="dispCard('next');"><span class="glyphicon glyphicon-forward"></span></button>
-	<button type="button" class="btn btn-primary" onclick="dispCard('last');"><span class="glyphicon glyphicon-fast-forward"></span></button>
-	</div>
-	<div class="clearfix">
+	<div class="btn-group" id="bottomBtnContainer">
+		<button type="button" class="btn btn-default" onclick="openHelp();">
+			<span class="glyphicon glyphicon-info-sign text-success"></span></button>
 		<button class="btn btn-default" onclick="$('#animation').toggle();$('#animation-buttons').toggle();">
 			<span class="han">汉字</span><span class="eng">Han</span></button>
 		<button class="btn btn-default" onclick="$('#Pinyin').toggle();">
 			<span class="han">拼音</span><span class="eng">Pyn</span></button>
 		<button class="btn btn-default" onclick="$('#English').toggle();$('#PartofSpeech').toggle();">
 			<span class="han">英语</span><span class="eng">Eng</span></button>
-		<button class="btn btn-success" onclick="knowIt();"><span class="glyphicon glyphicon-ok"></span></button>
-		<button class="btn btn-danger" onclick="dispCard();"><span class="glyphicon glyphicon-remove"></span></button>
+		<button class="btn btn-default" onclick="dispCard();">
+			<span class="glyphicon glyphicon-remove text-danger"></span></button>
+		<button class="btn btn-default" onclick="knowIt();">
+			<span class="glyphicon glyphicon-ok text-success"></span></button>
 	</div>
 </div>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
