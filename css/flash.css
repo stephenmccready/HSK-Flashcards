@@ -1,14 +1,17 @@
 *{margin:0;}
-html,body{height:100%;padding:0 !important;}
-html{overflow: -moz-scrollbars-vertical; overflow-y: scroll;}
+html,body{padding:0 !important;}
+html{overflow:-moz-scrollbars-vertical;overflow-y:scroll;}
 .header{width:100%;}
-.wrapper{width:100%;min-height:99%;height:auto !important;height:99%;margin:0 auto -80px;text-align:center;padding-top:6px;}
-.footer{width:100%;height:80px;text-align:center;z-index:999;position:relative;background-color:#FFF;}
+#navbar{width:100%;background-color:#337ab7;display:flex;justify-content:center;}
+.wrapper{width:100%;margin:0 auto -80px;text-align:center;}
+.footer{width:100%;height:40px;text-align:center;z-index:99;position:absolute;bottom:0;}
+.fgroup{width:100%;height:40px;text-align:center;z-index:99;position:relative;bottom:0;justify-content:flex-end;display:flex;margin-top:6px !important;}
 .footer div{margin-top:0.4em;}
-#divHSK,#divLesson,#divSearch,#divSettings{display:none;margin-top: 0.5em;margin-bottom: 0.5em;}
+h5{font-weight:bold;}
+#divHSK,#divLesson,#divSearch,#divSettings{display:none;margin-top:0.5em;margin-bottom:0.5em;}
 #divLesson label{margin-bottom:.25em;}
 #divOptions{margin-top: 0.5em;margin-bottom: 0.5em;}
-#Card{border-left:1px solid #000;border-right:3px solid #000;border-top:1px solid #000;border-bottom:3px solid #000;border-radius:11px;-webkit-border-radius:11px;overflow-y:auto;background-color:#F5F5F5;width:80%;margin-left:10%;margin-right:10%;overflow-x:hidden;}
+#Card{border-left:1px solid #000;border-right:2px solid #000;border-top:1px solid #000;border-bottom:2px solid #000;border-radius:9px;-webkit-border-radius:9px;overflow-y:auto;background-color:#F5F5F5;width:80%;margin-left:10%;margin-right:10%;overflow-x:hidden;flex-direction:column;height:100vh;display:flex;justify-content:space-between;}
 #animation {width:100%;text-align:center;margin:0 auto;display:inline-block;}
 #animation-buttons {width:100%;text-align:center;margin:0 auto;display:inline-block;}
 #animation-buttons div{width: 0;}
@@ -18,12 +21,15 @@ html{overflow: -moz-scrollbars-vertical; overflow-y: scroll;}
 a.btn-stroke-order{margin-left:0.25em;margin-right:0.25em;}
 button.btn-audio{margin-left:0.5em;margin-right:0.5em;margin-top:0.5em;}
 #Pinyin, #English, #PartofSpeech{text-align:center;font-size:1.5em;width:98%;}
-#Pinyin{font-weight: bold;}
-#Views {text-align:center;font-size:1.05em;color:#6f93c3;width:100%;padding-top:0em;}
-#footCenter{color:#B0C4DE;font-size:1.25em;margin-left:0.5%;margin-right:0.5%;}
-.pyn {color:purple;}
-.pos {color:#B0C4DE;display:none;}
-p.chk {margin-top:0.05em;}
+#Pinyin-container{font-weight:bold;min-height:2.1425em;}
+#English-container{min-height:6.4275em;}
+#PartofSpeech-container{min-height:2.1425em;}
+#Views{text-align:center;font-size:1.05em;color:#6f93c3;width:100%;padding-top:0.5em;padding-bottom:0.5em;}
+#footCenter{border-left:0 !important;border-right:0 !important;}
+#footCardNav{width:100% !important;background-color:#337ab7;justify-content:center;}
+.pyn{color:purple;}
+.pos{color:#6f93c3;display:none;}
+p.chk{margin-top:0.05em;}
 #List{display:none;overflow:auto;border:1px solid #DCDCDC;}
 #listTab{border-bottom:1px solid #DCDCDC;}
 #listTab td{vertical-align: middle !important;}
@@ -33,28 +39,31 @@ p.chk {margin-top:0.05em;}
 .colPOS {color:#B0C4DE;display:none;}
 .toggleBox{text-align:right;}
 @media all and (min-width:1024px) {
-	#Card{width:60% !important;margin-left:20% !important;margin-right:20% !important;height:33em !important;}
+	#Card{width:60% !important;margin-left:20% !important;margin-right:20% !important;height:36em !important;}
 	#List{width:60%;margin-left:20%;margin-right:20%;height:39em;overflow:auto;}
 	#divSettings,#divSearch,#divHSK,#divLesson{width:60%;margin-left:20%;margin-right:20%;}
 	.checkboxLabel{width:40%;text-align:left;}
 	.toggleBox{width:20%;}
 	.hanzi{font-size:8em;width:100%;text-align:center;}
+	.overlay-content{width:50%;margin:auto;}
 }
 @media all and (min-width:621px) and (max-width:1023px) {
-	#Card{width:80% !important;margin-left:10% !important;margin-right:10% !important;height:33em !important;}
+	#Card{width:80% !important;margin-left:10% !important;margin-right:10% !important;height:36em !important;}
 	#List{width:70%;margin-left:15%;margin-right:15%;height:41em;overflow:auto;font-size:125% !important;}
 	#divSettings,#divSearch,#divHSK,#divLesson{width:70%;margin-left:15%;margin-right:15%;}
 	.checkboxLabel{width:40%;text-align:left;}
 	.toggleBox{width:30%;}
 	.hanzi{font-size:8em;width:100%;text-align:center;}
+	.overlay-content{width:70%;margin:auto;}
 }
 @media all and (max-width:620px) {
-	#Card{width:95% !important;margin-left:2.5% !important;margin-right:2.5% !important;height:27em !important}
+	#Card{width:96% !important;margin-left:2% !important;margin-right:2% !important;height:30em !important}
 	#List{width:100%;margin-left:0%;margin-right:0%;height:34em;}	
 	#divSettings,#divSearch,#divHSK,#divLesson{width:95%;margin-left:2.5%;margin-right:2.5%;}
 	.checkboxLabel{width:60%;text-align:left;}
 	.toggleBox{width:35%;}
 	.hanzi{font-size:4em;width:100%;text-align:center;}
+	.overlay-content{width:90%;margin:auto;}
 }
 .loader {
 	position:absolute;left:50%;top:45%;
@@ -77,51 +86,59 @@ p.chk {margin-top:0.05em;}
     height: 30px;
     animation: spin 2s linear infinite;
 }
-@-webkit-keyframes spin {
-	0% { -webkit-transform:rotate(0deg);}
-	100% { -webkit-transform:rotate(360deg);}
-}
-@keyframes spin {
-	0% { transform:rotate(0deg);}
-	100% { transform:rotate(360deg);}
-}
-td:nth-child(1) {width:5%;font-size:80%;padding:0px 0px 0px 2px !important;}
-td:nth-child(2) {width:5%;font-size:125%;padding:0px 0px 0px 0px !important;}
-td:nth-child(3) {width:20%;font-size:125%;padding:0px 0px 0px 0px !important;}
-td:nth-child(4) {width:5%;padding:0px 0px 0px 0px !important;}
-td:nth-child(5) {width:25%;padding:0px 0px 0px 0px !important;}
-td:nth-child(6) {width:35%;padding:0px 0px 0px 0px !important;}
-td:nth-child(7) {width:5%;padding:0px 0px 0px 0px !important;text-align:left !important;}
-.tone1 {color: red;}
-.tone2 {color: green;}
-.tone3 {color: blue;}
-.tone4 {color: purple;}
-.tone5 {color: gray;}
-#audio_player_container {display:none;}
+@-webkit-keyframes spin{0% { -webkit-transform:rotate(0deg);}100% { -webkit-transform:rotate(360deg);}}
+@keyframes spin{0% { transform:rotate(0deg);}100% { transform:rotate(360deg);}}
+td:nth-child(1){width:5%;font-size:80%;padding:0px 0px 0px 2px !important;}
+td:nth-child(2){width:5%;font-size:125%;padding:0px 0px 0px 0px !important;}
+td:nth-child(3){width:20%;font-size:125%;padding:0px 0px 0px 0px !important;}
+td:nth-child(4){width:5%;padding:0px 0px 0px 0px !important;}
+td:nth-child(5){width:5%;padding:0px 0px 0px 0px !important;}
+td:nth-child(6){width:25%;padding:0px 0px 0px 0px !important;}
+td:nth-child(7){width:30%;padding:0px 0px 0px 0px !important;}
+td:nth-child(8){width:5%;padding:0px 0px 0px 0px !important;text-align:left !important;}
+.tone1{color:red;}
+.tone2{color:green;}
+.tone3{color:blue;}
+.tone4{color:purple;}
+.tone5{color:gray;}
+#audio_player_container{display:none;}
 .table-borderless{border:none !important;}
 .table-borderless td{border:none !important;}
-svg {display:inline-block !important;margin:0 auto !important;text-align: center !important;}
-#copied-container {position: absolute; left: 50%;}
-#copied {display: none; font-size: 1.5em; background-color:#DCDCDC; position: relative; left: -50%; margin-top: 10%; opacity: 0.95; filter: alpha(opacity=95);}
+table td {word-wrap:break-word;}
+svg{display:inline-block !important;margin:0 auto !important;text-align:center !important;}
+#copied-container{position:absolute;left:50%;}
+#copied{display:none;font-size:1.5em;background-color:#DCDCDC;position:relative;left:-50%;margin:15%;padding:2.5%;opacity:0.95;filter:alpha(opacity=95);}
 #random-container {position:relative;top:0.5em;width:100%;display:block;height:2.5em;}
-#random-glyph {font-size:130%;width:5%;margin-right:40.5%;margin-left:2%;display:inline;text-align:left;}
-.random-off {color:#DCDCDC !important;}
-.random-on {color:#449d44 !important;}
-#review-glyph {font-size:130%;width:5%;margin-left:40.5%;margin-right:2%;display:inline;text-align:right;}
-.review-off {color:#DCDCDC !important;}
-.review-on {color:#ec971f !important;}
-#copy-glyph {font-size:130%;width:5%;display:inline;text-align:center;}
+#random-glyph{font-size:130%;width:5%;margin-right:40.5%;margin-left:2%;display:inline;text-align:left;}
+.random-off{color:#DCDCDC !important;}
+.random-on{color:#449d44 !important;}
+#review-glyph{font-size:130%;width:5%;margin-left:40.5%;margin-right:2%;display:inline;text-align:right;}
+.review-off{color:#DCDCDC !important;}
+.review-on{color:#ec971f !important;}
+#copy-glyph{font-size:130%;width:5%;display:inline;text-align:center;}
 .han{display:none;}
 #myform2{margin-top:0.5em;margin-bottom:0.5em;}
 #cardButton{display:none;}
-.divclose {width:100%; text-align: right; padding-right: .5em;}
+.divclose{width:100%; text-align: right; padding-right: .5em;}
 .checkboxLabel,.toggleBox{display:inline-block;}
 #holdLesson,#holdHSK{display:none;}
 div.disabled{color:#B0B0B0;}
 #btn-clearsearch{color:#B0B0B0 !important;}
-#searchbtnbox, #searchbox {display:inline-block;margin-bottom:0.75em;}
+#searchbtnbox,#searchbox{display:inline-block;margin-bottom:0.75em;}
 #searchbox input{border:0 !important;}
 #searchbox button{border:0 !important;}
 #searchbox span{border:0 !important;}
-#searchbox {border:1px solid #ccc; background:#fff !important;}
-#searchbox input{font-size:14px; font-weight:bold;}
+#searchbox{border:1px solid #ccc;background:#fff !important;}
+#searchbox input{font-size:14px;font-weight:bold;padding-left:3px;}
+div.fgroup{width:100%;text-align:center;margin:0;display:flex-end !important;background-color:#337ab7;}
+.overlay{height:100%;width:100%;position:fixed;z-index:999;left:0;top:0;background-color:rgb(0,0,0);background-color:rgba(0,0,0, 0.7);overflow-x:hidden;display:none;}
+.overlay a:hover, .overlay a:focus{color:#f1f1f1;}
+.overlay-content{position:relative;top:5%;margin-top:5%;color:#DCDCDC;}
+.overlay .closebtn{position:absolute;top:2.5%;right:10%;font-size:40px;}
+@media screen and (max-height:450px){.overlay .closebtn{font-size:40px;top:2.5%;right:10%;}}
+.btn-primary {border:1px solid #337ab7 !important;}
+.bottomBtnContainer{margin:0 !important;}
+#fCard div{width:100%;display:flex;justify-content:center;border-top:1px solid silver;background-color:#fff;}
+#fCard button{border:0px;}
+.btn-group .btn{border-radius: 0 !important;}
+#divRadicalBtn, #PartofSpeech{display:inline;}
